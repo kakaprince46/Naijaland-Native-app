@@ -1718,6 +1718,22 @@
 
             // Delegated event listeners for dynamic content
             document.addEventListener('click', function (e) {
+                // View Details Button
+                if (e.target.classList.contains('view-details') || e.target.closest('.view-details')) {
+                    const user = auth.currentUser;
+                    if (!user) {
+                        showLoginModal();
+                        showAuthMessage("Please log in to view property details and make a secure payment.", "info");
+                    } else {
+                        // Existing functionality for logged-in users
+                        const button = e.target.classList.contains('view-details') ? e.target : e.target.closest('.view-details');
+                        const propertyId = button.dataset.id;
+                        // Implement what should happen when a logged-in user clicks "View Details"
+                        // For example, show a modal with more details.
+                        console.log("Viewing details for property:", propertyId);
+                    }
+                }
+
                 // Pay buttons
                 if (e.target.classList.contains('pay-button') || e.target.closest('.pay-button')) {
                     const button = e.target.classList.contains('pay-button') ? e.target : e.target.closest('.pay-button');
@@ -2013,64 +2029,64 @@
 
                 if (receipt.fileType.includes('image')) {
                     modal.innerHTML = `
-                        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl auth-form">
-                            <div class="p-6">
-                                <div class="flex justify-between items-center mb-4">
-                                    <h2 class="text-2xl font-bold text-green-800">Payment Receipt</h2>
-                                    <button class="close-receipt-view text-gray-500 hover:text-gray-700">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                                
-                                <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <p class="text-sm text-gray-500">Amount Paid</p>
-                                        <p class="font-medium">₦${receipt.amount.toLocaleString()}</p>
+                            <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl auth-form">
+                                <div class="p-6">
+                                    <div class="flex justify-between items-center mb-4">
+                                        <h2 class="text-2xl font-bold text-green-800">Payment Receipt</h2>
+                                        <button class="close-receipt-view text-gray-500 hover:text-gray-700">
+                                            <i class="fas fa-times"></i>
+                                        </button>
                                     </div>
-                                    <div>
-                                        <p class="text-sm text-gray-500">Payment Date</p>
-                                        <p class="font-medium">${paymentDate}</p>
+                                    
+                                    <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <p class="text-sm text-gray-500">Amount Paid</p>
+                                            <p class="font-medium">₦${receipt.amount.toLocaleString()}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-500">Payment Date</p>
+                                            <p class="font-medium">${paymentDate}</p>
+                                        </div>
                                     </div>
-                                </div>
-                                
-                                <div class="border rounded-lg p-2">
-                                    <img src="data:${receipt.fileType};base64,${receipt.base64Data}" alt="Payment Receipt" class="max-h-[70vh] mx-auto">
+                                    
+                                    <div class="border rounded-lg p-2">
+                                        <img src="data:${receipt.fileType};base64,${receipt.base64Data}" alt="Payment Receipt" class="max-h-[70vh] mx-auto">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    `;
+                        `;
                 } else {
                     modal.innerHTML = `
-                        <div class="bg-white rounded-lg shadow-xl w-full max-w-md auth-form">
-                            <div class="p-6">
-                                <div class="flex justify-between items-center mb-4">
-                                    <h2 class="text-2xl font-bold text-green-800">Payment Receipt</h2>
-                                    <button class="close-receipt-view text-gray-500 hover:text-gray-700">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                                
-                                <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <p class="text-sm text-gray-500">Amount Paid</p>
-                                        <p class="font-medium">₦${receipt.amount.toLocaleString()}</p>
+                            <div class="bg-white rounded-lg shadow-xl w-full max-w-md auth-form">
+                                <div class="p-6">
+                                    <div class="flex justify-between items-center mb-4">
+                                        <h2 class="text-2xl font-bold text-green-800">Payment Receipt</h2>
+                                        <button class="close-receipt-view text-gray-500 hover:text-gray-700">
+                                            <i class="fas fa-times"></i>
+                                        </button>
                                     </div>
-                                    <div>
-                                        <p class="text-sm text-gray-500">Payment Date</p>
-                                        <p class="font-medium">${paymentDate}</p>
+                                    
+                                    <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <p class="text-sm text-gray-500">Amount Paid</p>
+                                            <p class="font-medium">₦${receipt.amount.toLocaleString()}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-500">Payment Date</p>
+                                            <p class="font-medium">${paymentDate}</p>
+                                        </div>
                                     </div>
-                                </div>
-                                
-                                <div class="text-center py-8">
-                                    <i class="fas fa-file-pdf text-5xl text-red-500 mb-4"></i>
-                                    <p class="mb-4">PDF receipt uploaded</p>
-                                    <button class="download-receipt bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition" data-id="${investmentId}">
-                                        <i class="fas fa-download mr-2"></i> Download Receipt
-                                    </button>
+                                    
+                                    <div class="text-center py-8">
+                                        <i class="fas fa-file-pdf text-5xl text-red-500 mb-4"></i>
+                                        <p class="mb-4">PDF receipt uploaded</p>
+                                        <button class="download-receipt bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition" data-id="${investmentId}">
+                                            <i class="fas fa-download mr-2"></i> Download Receipt
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    `;
+                        `;
                 }
 
                 document.body.appendChild(modal);
