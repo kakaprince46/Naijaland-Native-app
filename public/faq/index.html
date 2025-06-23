@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NaijaLand - Frequently Asked Questions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .faq-item {
+            transition: all 0.3s ease;
+        }
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .faq-item.active .faq-content {
+            max-height: 1000px;
+        }
+        .faq-item.active .faq-toggle i {
+            transform: rotate(180deg);
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: lch(44.31% 51.74 146.96);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-xl mr-3">
+                        NL
+                    </div>
+                    <h1 class="text-2xl font-bold text-gray-800">NaijaLand</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">Frequently Asked Questions</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">Have questions? We've got answers. Here are some of the most common queries we receive from our valued visitors and clients.</p>
+            <div class="max-w-2xl mx-auto relative">
+                <input type="text" placeholder="Search questions..." class="w-full px-6 py-4 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-400">
+                <button class="absolute right-2 top-2 bg-green-600 text-white p-2 rounded-full hover:bg-green-700 transition duration-300">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Navigation -->
+    <div class="bg-white shadow-sm sticky top-0 z-10">
+        <div class="container mx-auto px-4 overflow-x-auto">
+            <div class="flex space-x-8 py-4">
+                <button class="nav-link active text-blue-600 font-medium whitespace-nowrap" data-category="general">General Questions</button>
+                <button class="nav-link text-gray-600 hover:text-green-600 font-medium whitespace-nowrap" data-category="buying">The Buying Process</button>
+                <button class="nav-link text-gray-600 hover:text-green-600 font-medium whitespace-nowrap" data-category="payments">Payments & Security</button>
+                <button class="nav-link text-gray-600 hover:text-green-600 font-medium whitespace-nowrap" data-category="after">After Your Purchase</button>
+                <button class="nav-link text-gray-600 hover:text-green-600 font-medium whitespace-nowrap" data-category="account">Account & Support</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Content -->
+    <main class="container mx-auto px-4 py-12">
+        <!-- General Questions -->
+        <section id="general" class="faq-section">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8">General Questions</h2>
+            <div class="space-y-6">
+                <!-- FAQ Item 1 -->
+                <div class="faq-item bg-white rounded-xl shadow-md overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold text-gray-800">What is NaijaLand?</h3>
+                        <i class="fas fa-chevron-down text-green-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6">
+                        <p class="text-gray-600">NaijaLand is a modern property technology (PropTech) platform developed by Prince Kaka Global Resources. Our mission is to make buying and managing land in Nigeria simple, secure, and transparent for everyone, whether you're a first-time buyer or a seasoned investor.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="faq-item bg-white rounded-xl shadow-md overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold text-gray-800">Are the properties listed on NaijaLand legitimate?</h3>
+                        <i class="fas fa-chevron-down text-green-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6">
+                        <p class="text-gray-600">Absolutely. This is our highest priority. Every property listed on our platform undergoes thorough due diligence to ensure it is fully verified, has proper documentation (like a Certificate of Occupancy, Deed of Conveyance, etc.), and is free from any government acquisition or community disputes.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="faq-item bg-white rounded-xl shadow-md overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold text-gray-800">Do I need to download an app from the App Store or Play Store?</h3>
+                        <i class="fas fa-chevron-down text-green-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6">
+                        <p class="text-gray-600">No, you don't. NaijaLand is a Progressive Web App (PWA), which means it runs directly in your web browser (like Chrome, Safari, etc.) on any device. For an app-like experience, you can use the "Add to Home Screen" feature in your browser menu to place our icon on your phone's home screen for easy access.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Buying Process -->
+        <section id="buying" class="faq-section hidden">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8">The Buying Process</h2>
+            <div class="space-y-6">
+                <!-- FAQ Item 4 -->
+                <div class="faq-item bg-white rounded-xl shadow-md overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold text-gray-800">How do I buy a property on NaijaLand?</h3>
+                        <i class="fas fa-chevron-down text-green-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6">
+                        <p class="text-gray-600 mb-4">We've made the process straightforward:</p>
+                        <ol class="list-decimal pl-6 space-y-2 text-gray-600">
+                            <li><strong>Browse:</strong> Explore our available properties on the main page.</li>
+                            <li><strong>Register:</strong> Sign up for a free account to access your personal dashboard.</li>
+                            <li><strong>Inspect:</strong> We strongly recommend scheduling a physical site inspection. It's free of charge.</li>
+                            <li><strong>Pay:</strong> Make a secure payment via Paystack or a direct bank transfer to our official company account.</li>
+                            <li><strong>Get Your Documents & Property Allocation:</strong> Once your payment is confirmed, we begin processing your legal documents, which will be ready within 21 working days. Property allocation will follow on or before 3 months from the date of payment.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div class="faq-item bg-white rounded-xl shadow-md overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold text-gray-800">Can I inspect the land before making a payment?</h3>
+                        <i class="fas fa-chevron-down text-blue-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6">
+                        <p class="text-gray-600">Yes, and we insist that you do! We offer free site inspections from Monday to Saturday. This allows you to see the property firsthand and ask any questions you may have. Your satisfaction and confidence are important to us. Please contact our support team via WhatsApp to schedule an inspection.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 6 -->
+                <div class="faq-item bg-white rounded-xl shadow-md overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold text-gray-800">Are there any hidden or additional fees I should know about?</h3>
+                        <i class="fas fa-chevron-down text-blue-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6">
+                        <p class="text-gray-600">We believe in full transparency. The price listed is for the land itself. The only other mandatory fees are for essential documentation (like a survey and deed of conveyance) and a one-time Development Fee. This Development Fee covers infrastructure in the estate (like roads, drainage, etc.) and is paid before you begin construction. These fees are clearly communicated before any transaction.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payments & Security -->
+        <section id="payments" class="faq-section hidden">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8">Payments & Security</h2>
+            <div class="space-y-6">
+                <!-- FAQ Item 7 -->
+                <div class="faq-item bg-white rounded-xl shadow-md overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold text-gray-800">How can I pay for a property?</h3>
+                        <i class="fas fa-chevron-down text-blue-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6">
+                        <p class="text-gray-600 mb-4">You can pay through two secure methods:</p>
+                        <ul class="list-disc pl-6 space-y-2 text-gray-600">
+                            <li><strong>Online Payment:</strong> Via Paystack, using your debit card or other online methods.</li>
+                            <li><strong>Direct Bank Transfer:</strong> By depositing directly into the official Prince Kaka Global Resources bank account listed on your dashboard.</li>
+                        </ul>
+                        <p class="text-gray-600 mt-4 font-medium">Important: Never make cash payments to an agent or any individual. All payments must go through our official channels.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 8 -->
+                <div class="faq-item bg-white rounded-xl shadow-md overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold text-gray-800">I made a bank transfer. What is the next step?</h3>
+                        <i class="fas fa-chevron-down text-green-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6">
+                        <p class="text-gray-600">After making a transfer, please use the "Upload Payment Receipt" feature in your dashboard. You will need to provide the property details, amount paid, payment date, and a screenshot or PDF of your receipt. Our team will then verify it and update your account.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 9 -->
+                <div class="faq-item bg-white rounded-xl shadow-md overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold text-gray-800">Is my payment and personal information secure?</h3>
+                        <i class="fas fa-chevron-down text-blue-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6">
+                        <p class="text-gray-600">Yes. For online payments, we use Paystack, a leading payment processor in Africa that is fully PCI-DSS compliant, meaning they adhere to the highest security standards. We never store your card details on our platform. Your personal data is protected and used only for processing your transactions and managing your account.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- After Your Purchase -->
+        <section id="after" class="faq-section hidden">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8">After Your Purchase</h2>
+            <div class="space-y-6">
+                <!-- FAQ Item 10 -->
+                <div class="faq-item bg-white rounded-xl shadow-md overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold text-gray-800">I've completed my payment. When do I get my documents?</h3>
+                        <i class="fas fa-chevron-down text-blue-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6">
+                        <p class="text-gray-600">Once your full payment is confirmed, we begin the documentation process immediately. You will typically receive your complete set of documents, including your Sales Receipt, Deed of Conveyance, and Registered Survey Plan, within 30 business days.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 11 -->
+                <div class="faq-item bg-white rounded-xl shadow-md overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold text-gray-800">I just bought a property, but it's not showing on my dashboard yet. Why?</h3>
+                        <i class="fas fa-chevron-down text-blue-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6">
+                        <p class="text-gray-600">After a payment is made (especially via bank transfer), our team needs to verify it with the bank. This verification process can take up to 24 hours. Once confirmed, your new property will appear in the "My Land Investments" section of your dashboard.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 12 -->
+                <div class="faq-item bg-white rounded-xl shadow-md overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold text-gray-800">What if I want to sell my land in the future?</h3>
+                        <i class="fas fa-chevron-down text-blue-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6">
+                        <p class="text-gray-600">We can help with that! If you purchase a property through NaijaLand, you have the option to re-list it for sale on our platform. We charge a small commission to cover marketing and administrative costs for the resale. You can initiate this process directly from your dashboard.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Account & Technical Support -->
+        <section id="account" class="faq-section hidden">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8">Account & Technical Support</h2>
+            <div class="space-y-6">
+                <!-- FAQ Item 13 -->
+                <div class="faq-item bg-white rounded-xl shadow-md overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold text-gray-800">Why do I need to register an account?</h3>
+                        <i class="fas fa-chevron-down text-blue-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6">
+                        <p class="text-gray-600 mb-4">Registering gives you access to your secure personal dashboard, which allows you to:</p>
+                        <ul class="list-disc pl-6 space-y-2 text-gray-600">
+                            <li>Track your investments</li>
+                            <li>Make secure payments and upload receipts</li>
+                            <li>Access your documents</li>
+                            <li>Manage your profile information</li>
+                            <li>List your property for resale</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 14 -->
+                <div class="faq-item bg-white rounded-xl shadow-md overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold text-gray-800">I have more questions. How can I get help?</h3>
+                        <i class="fas fa-chevron-down text-blue-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6">
+                        <p class="text-gray-600 mb-4">We are here to assist you! The best way to reach us is through our support channels:</p>
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <div class="flex items-center mb-3">
+                                <i class="fab fa-whatsapp text-green-600 text-xl mr-3"></i>
+                                <span class="text-gray-800 font-medium">WhatsApp: +234 816 095 2082</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-envelope text-blue-600 text-xl mr-3"></i>
+                                <span class="text-gray-800 font-medium">Email: smartprincenet@gmail.com</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mt-4">Our team is ready to help with inspections, payment inquiries, or any other questions you may have.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact CTA -->
+        <section class="bg-blue-600 rounded-xl p-8 md:p-12 mt-16 text-white">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-4">Still have questions?</h2>
+                <p class="text-xl mb-8">Our support team is available to answer any questions you might have about our properties or the buying process.</p>
+                <div class="flex flex-col md:flex-row justify-center gap-4">
+                    <button class="bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 rounded-full font-semibold transition duration-300">
+                        <i class="fab fa-whatsapp mr-2"></i> Chat on WhatsApp
+                    </button>
+                    <button class="bg-transparent border-2 border-white hover:bg-blue-700 px-8 py-3 rounded-full font-semibold transition duration-300">
+                        <i class="fas fa-envelope mr-2"></i> Send Email
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // FAQ Toggle Functionality
+        document.querySelectorAll('.faq-toggle').forEach(button => {
+            button.addEventListener('click', () => {
+                const faqItem = button.closest('.faq-item');
+                faqItem.classList.toggle('active');
+            });
+        });
+
+        // FAQ Category Navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('.nav-link').forEach(el => {
+                    el.classList.remove('active', 'text-blue-600');
+                    el.classList.add('text-gray-600');
+                });
+                
+                // Add active class to clicked link
+                link.classList.add('active', 'text-blue-600');
+                link.classList.remove('text-gray-600');
+                
+                // Hide all sections
+                document.querySelectorAll('.faq-section').forEach(section => {
+                    section.classList.add('hidden');
+                });
+                
+                // Show selected section
+                const category = link.getAttribute('data-category');
+                document.getElementById(category).classList.remove('hidden');
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            document.querySelectorAll('.faq-item').forEach(item => {
+                const question = item.querySelector('h3').textContent.toLowerCase();
+                const answer = item.querySelector('.faq-content').textContent.toLowerCase();
+                
+                if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
