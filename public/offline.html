@@ -6,41 +6,64 @@
     <title>NaijaLand - Offline</title>
     <style>
         body {
-            font-family: sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
+            margin: 0;
             text-align: center;
-            background-color: #f3f4f6;
+            background-color: #f9fafb; /* Lighter gray */
             color: #374151;
+        }
+        .container {
+            max-width: 90%;
+            padding: 20px;
         }
         h1 {
             font-size: 2rem;
+            font-weight: 700;
             margin-bottom: 1rem;
-            color: #10b981;
+            color: #10b981; /* NaijaLand Green */
         }
         p {
             font-size: 1.1rem;
             margin-bottom: 2rem;
             max-width: 400px;
+            line-height: 1.6;
         }
         .icon {
-            width: 100px;
-            height: 100px;
-            margin-bottom: 2rem;
+            width: 80px; /* Adjusted size */
+            height: 80px;
+            margin-bottom: 1.5rem;
+        }
+        button {
+            background-color: #10b981; /* Green Button */
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #059669; /* Darker Green */
         }
     </style>
 </head>
 <body>
-    <div class="icon">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#10b981">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
-        </svg>
+    <div class="container">
+        <div class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#d1d5db">
+                <path d="M12 3C7.31 3 3.07 5.9 0 10.12L2.88 13C5.08 9.93 8.33 8 12 8s6.92 1.93 9.12 5L24 10.12C20.93 5.9 16.69 3 12 3zm10.29 13.44l-2.82 2.82-1.42-1.41 2.83-2.83-2.12-2.12-2.12 2.12-2.83-2.83-1.41 1.41 2.83 2.83-2.12 2.12-2.83-2.83-1.41 1.41 2.83 2.83-2.12 2.12L8.46 22l8.83-8.83 2.83 2.83 1.17-1.16zM4.88 17.5C6.9 15.94 9.36 15 12 15s5.1 0.94 7.12 2.5l1.41-1.41C18.41 14.59 15.31 13 12 13s-6.41 1.59-8.53 3.09L4.88 17.5z"/>
+            </svg>
+        </div>
+        <h1>You're Currently Offline</h1>
+        <p>It seems there's an issue with your internet connection. Please try again once you're back online.</p>
+        <button onclick="window.location.reload()">Try Again</button>
     </div>
-    <h1>You're Offline</h1>
-    <p>Please check your internet connection and try again. Some features may not be available offline.</p>
-    <button onclick="window.location.reload()">Try Again</button>
 </body>
 </html>
