@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - NaijaLand</title>
+    <meta name="description" content="Learn about NaijaLand, your trusted partner for verified and affordable land in Nigeria. Discover our tech-driven approach to real estate.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'green-800': '#166534',
+                        'green-700': '#15803d',
+                        'green-600': '#16a34a',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .active-nav {
+            position: relative;
+        }
+        .active-nav::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: white;
+        }
+    </style>
+</head>
+<body class="font-sans bg-white text-gray-800">
+    <!-- Header/Navigation -->
+    <header class="bg-green-800 text-white shadow-md">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-home text-2xl"></i>
+                    <a href="index.html" class="text-xl font-bold">NaijaLand</a>
+                </div>
+                
+                <nav class="hidden md:block">
+                    <ul class="flex space-x-8">
+                        <li><a href="index.html" class="hover:text-green-200 transition">Properties</a></li>
+                        <li><a href="about.html" class="hover:text-green-200 transition active-nav">About Us</a></li>
+                        <li><a href="https://www.naijaland.site/faq/" class="hover:text-green-200 transition">FAQ</a></li>
+                        <li><a href="contact.html" class="hover:text-green-200 transition">Contact</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="md:hidden">
+                    <button id="menu-toggle" class="text-white focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4 pb-2">
+                <ul class="space-y-3">
+                    <li><a href="index.html" class="block hover:text-green-200 transition">Properties</a></li>
+                    <li><a href="about.html" class="block hover:text-green-200 transition font-semibold">About Us</a></li>
+                    <li><a href="https://www.naijaland.site/faq/" class="block hover:text-green-200 transition">FAQ</a></li>
+                    <li><a href="contact.html" class="block hover:text-green-200 transition">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="py-16 md:py-24 bg-gradient-to-r from-green-700 to-green-600 text-white">
+            <div class="container mx-auto px-4">
+                <div class="max-w-3xl mx-auto text-center">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4">About NaijaLand</h1>
+                    <h2 class="text-2xl md:text-3xl font-semibold mb-6">Building Wealth Through Real Estate</h2>
+                    <p class="text-lg md:text-xl leading-relaxed">
+                        Welcome to NaijaLand, your trusted partner in acquiring verified and affordable land in Nigeria. 
+                        We are a forward-thinking PropTech platform, developed by Prince Kaka Global Resources, 
+                        dedicated to simplifying your journey into real estate investment. Our mission is to empower 
+                        you to build lasting wealth by making land ownership accessible, secure, and straightforward.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Approach Section -->
+        <section class="py-16 bg-gray-100">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto">
+                    <h3 class="text-3xl font-bold text-green-800 mb-8 text-center">Our Tech-Driven Approach</h3>
+                    <div class="bg-white rounded-lg shadow-md p-8 md:p-10">
+                        <p class="text-lg leading-relaxed mb-6">
+                            As experienced real estate consultants selling land in Nigeria, we have decided to use 
+                            technology to simplify and secure the entire process for you. Our platform is built on 
+                            a foundation of trust, transparency, and innovation.
+                        </p>
+                        <p class="text-lg leading-relaxed">
+                            We leverage technology to provide detailed property information, secure payment gateways, 
+                            and a seamless user experience from browsing to ownership. Our digital tools help you 
+                            make informed decisions with confidence, while our team ensures every transaction is 
+                            smooth and secure.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Meet Our CEO Section -->
+        <section class="py-16">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row items-center gap-12 max-w-6xl mx-auto">
+                    <div class="md:w-1/3 flex justify-center">
+                        <img src="kaka prince.jpg" alt="CEO of NaijaLand" 
+                             class="rounded-full w-64 h-64 md:w-80 md:h-80 object-cover shadow-xl border-4 border-green-700">
+                    </div>
+                    <div class="md:w-2/3">
+                        <h4 class="text-3xl font-bold text-green-800 mb-6">Meet Our CEO</h4>
+                        <p class="text-lg leading-relaxed mb-6">
+                            Our vision is guided by our CEO, a seasoned politician, real estate consultant, and an 
+                            AI engineer in training. With years of experience in politics and strategic planning, 
+                            he brings a unique understanding of governance, policy-making, and public engagement 
+                            to the real estate sector.
+                        </p>
+                        <p class="text-lg leading-relaxed">
+                            His commitment to providing innovative, AI-powered solutions is the driving force behind 
+                            NaijaLand. Under his leadership, we are transforming how Nigerians access and invest in 
+                            real estate, combining traditional expertise with cutting-edge technology.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Choose Us Section -->
+        <section class="py-16 bg-gray-100">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-green-800 mb-12 text-center">Why Choose Us?</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+                    <!-- Feature 1 -->
+                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+                        <div class="text-green-700 mb-4">
+                            <i class="fas fa-shield-alt text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Verified Properties</h3>
+                        <p class="text-gray-600">
+                            Every plot of land listed on our platform is thoroughly vetted to ensure it is free from 
+                            encumbrances and legal issues, giving you peace of mind.
+                        </p>
+                    </div>
+                    
+                    <!-- Feature 2 -->
+                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+                        <div class="text-green-700 mb-4">
+                            <i class="fas fa-tag text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Affordable Prices</h3>
+                        <p class="text-gray-600">
+                            We are committed to offering competitive prices to make land ownership a reality for more 
+                            Nigerians, with flexible payment options available.
+                        </p>
+                    </div>
+                    
+                    <!-- Feature 3 -->
+                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+                        <div class="text-green-700 mb-4">
+                            <i class="fas fa-user-tie text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Expert Guidance</h3>
+                        <p class="text-gray-600">
+                            Our team, led by a seasoned consultant, is here to offer the support you need at every step, 
+                            from selection to documentation and beyond.
+                        </p>
+                    </div>
+                    
+                    <!-- Feature 4 -->
+                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+                        <div class="text-green-700 mb-4">
+                            <i class="fas fa-lock text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Secure Transactions</h3>
+                        <p class="text-gray-600">
+                            Invest with peace of mind through our secure online payment options and clear, transparent 
+                            processes that protect your investment.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-16 bg-green-700 text-white">
+            <div class="container mx-auto px-4 text-center">
+                <h3 class="text-3xl md:text-4xl font-bold mb-6">Ready to Build Your Future?</h3>
+                <p class="text-xl mb-8 max-w-2xl mx-auto">
+                    Start your journey to land ownership today with NaijaLand's verified properties and expert guidance.
+                </p>
+                <a href="index.html" class="inline-block bg-white text-green-800 font-bold py-3 px-8 rounded-lg 
+                   hover:bg-gray-100 transition duration-300 shadow-lg">
+                    Explore Properties
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">NaijaLand</h3>
+                    <p>Your trusted real estate consultant, we help you build wealth through real estate.</p>
+                    <div class="mt-4 flex space-x-4">
+                        <a href="#" class="hover:text-green-400 transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="hover:text-green-400 transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="hover:text-green-400 transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="hover:text-green-400 transition"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="https://www.naijaland.site/faq/" class="hover:text-green-400 transition">FAQ</a></li>
+                        <li><a href="index.html" class="hover:text-green-400 transition">Properties</a></li>
+                        <li><a href="about.html" class="hover:text-green-400 transition">About Us</a></li>
+                        <li><a href="contact.html" class="hover:text-green-400 transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Legal</h3>
+                    <ul class="space-y-2">
+                        <li><a href="https://www.naijaland.site/conditions/" class="hover:text-green-400 transition">Terms & Conditions</a></li>
+                        <li><a href="https://www.naijaland.site/conditions/" class="hover:text-green-400 transition">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center">
+                <p>&copy; 2025 Prince Kaka Global Resources. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>
