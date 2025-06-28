@@ -1078,6 +1078,66 @@
             publicKey: 'pk_live_87802cb3f016f04f2b8b797eb69e4e8cc68f0bce', // Your Paystack LIVE public key
         };
 
+        // ===================================
+        // NEW FUNCTION TO UPDATE META TAGS
+        // ===================================
+        function updateMetaTags(property) {
+            if (property) {
+                // Update title
+                document.title = `${property.title} - For Sale in ${property.location} | Naijaland`;
+
+                // Update meta description
+                let descriptionTag = document.querySelector('meta[name="description"]');
+                if (descriptionTag) {
+                    descriptionTag.setAttribute('content', `Affordable land for sale: ${property.title} in ${property.location}. Size: ${property.sqm} SQM. Price: ₦${property.price.toLocaleString()}. Buy verified property on Naijaland.`);
+                }
+
+                // Update meta keywords
+                let keywordsTag = document.querySelector('meta[name="keywords"]');
+                if (keywordsTag) {
+                    keywordsTag.setAttribute('content', `land for sale in ${property.location}, ${property.title}, buy land in Nigeria, affordable land, Naijaland`);
+                }
+
+                // Update Open Graph tags for social media sharing
+                let ogTitle = document.querySelector('meta[property="og:title"]');
+                if (ogTitle) {
+                    ogTitle.setAttribute('content', `${property.title} - For Sale in ${property.location} | Naijaland`);
+                }
+
+                let ogDescription = document.querySelector('meta[property="og:description"]');
+                if (ogDescription) {
+                    ogDescription.setAttribute('content', `Affordable land for sale: ${property.title} in ${property.location}. Size: ${property.sqm} SQM. Price: ₦${property.price.toLocaleString()}.`);
+                }
+
+                let ogImage = document.querySelector('meta[property="og:image"]');
+                if (ogImage) {
+                    ogImage.setAttribute('content', property.image);
+                }
+
+                let ogUrl = document.querySelector('meta[property="og:url"]');
+                if (ogUrl) {
+                    // Point the URL to the new property detail page
+                    ogUrl.setAttribute('content', `${window.location.origin}/property.html?id=${property.id}`);
+                }
+
+                // Update Twitter Card tags
+                let twitterTitle = document.querySelector('meta[property="twitter:title"]');
+                if (twitterTitle) {
+                    twitterTitle.setAttribute('content', `${property.title} - For Sale in ${property.location} | Naijaland`);
+                }
+
+                let twitterDescription = document.querySelector('meta[property="twitter:description"]');
+                if (twitterDescription) {
+                    twitterDescription.setAttribute('content', `Affordable land for sale: ${property.title} in ${property.location}. Size: ${property.sqm} SQM. Price: ₦${property.price.toLocaleString()}.`);
+                }
+
+                let twitterImage = document.querySelector('meta[property="twitter:image"]');
+                if (twitterImage) {
+                    twitterImage.setAttribute('content', property.image);
+                }
+            }
+        }
+
         // ======================
         // Firestore Property CRUD
         // ======================
@@ -1351,9 +1411,9 @@
         <div class="flex justify-between items-center">
             <span class="text-xl font-bold text-green-700">${formattedPrice}</span>
             <div class="flex items-center space-x-2">
-                <button class="view-details bg-gray-200 text-gray-800 px-3 py-2 rounded-lg hover:bg-gray-300 transition text-sm" data-id="${property.id}">
+                <a href="/public/property.html?id=${property.id}" class="view-details bg-gray-200 text-gray-800 px-3 py-2 rounded-lg hover:bg-gray-300 transition text-sm" data-id="${property.id}">
                     View Details
-                </button>
+                </a>
                 <a href="https://wa.me/2348160952082?text=I'd like to book an inspection for ${encodeURIComponent(property.title)}" 
                    target="_blank" 
                    class="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition text-sm flex items-center">
@@ -1364,7 +1424,6 @@
         </div>
     </div>
 `;
-
                 if (!isDashboard) {
                     app.propertyList.appendChild(card.cloneNode(true));
                 }
