@@ -2265,33 +2265,47 @@
         }
 
         // Login user
-        function loginUser() {
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
+            function loginUser() {
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
 
-            if (!email || !password) {
-                showAuthMessage('Please enter both email and password', 'error');
-                return;
+                if (!email || !password) {
+                    showAuthMessage('Please enter both email and password', 'error');
+                    return;
+                }
+
+                app.authLoading.classList.remove('hidden');
+                app.loginForm.classList.add('hidden');
+                document.getElementById('auth-loading-text').textContent = 'Logging in...';
+
+                auth.signInWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        // On successful login, hide the modal
+                        app.authModal.classList.add('hidden');
+                    })
+                    .catch((error) => {
+                        let errorMessage; // We will set the message based on the error type
+
+                        // Check for specific, common errors from Firebase
+                        if (error.code === 'auth/user-not-found') {
+                            errorMessage = 'No account found with this email address.';
+                        } else if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+                            // This is the specific message you wanted
+                            errorMessage = 'Incorrect password. Please try again.';
+                        } else {
+                            // This is a fallback for any other unexpected errors
+                            errorMessage = 'Login failed. Please check your connection and try again.';
+                            console.error("Firebase Login Error:", error); // Log the technical error for your own debugging
+                        }
+
+                        // Show the user-friendly error message
+                        showAuthMessage(errorMessage, 'error');
+
+                        // Hide the loading spinner and show the login form again
+                        app.authLoading.classList.add('hidden');
+                        app.loginForm.classList.remove('hidden');
+                    });
             }
-
-            app.authLoading.classList.remove('hidden');
-            app.loginForm.classList.add('hidden');
-            document.getElementById('auth-loading-text').textContent = 'Logging in...';
-
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    app.authModal.classList.add('hidden');
-                })
-                .catch((error) => {
-                    let errorMessage = error.message;
-                    if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
-                        errorMessage = 'Invalid email or password.';
-                    }
-                    showAuthMessage(errorMessage, 'error');
-                    app.authLoading.classList.add('hidden');
-                    app.loginForm.classList.remove('hidden');
-                });
-        }
 
         // Register user
         function registerUser() {
