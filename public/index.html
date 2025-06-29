@@ -1430,8 +1430,9 @@
 
                 // Dashboard version has payment button
                 const dashboardCard = card.cloneNode(true);
-                const buttonContainer = dashboardCard.querySelector('.view-details').parentNode;
-                buttonContainer.innerHTML = `
+                // Target the parent container of both the price and buttons
+                const priceAndButtonContainer = dashboardCard.querySelector('.flex.justify-between.items-center');
+                priceAndButtonContainer.innerHTML = `
     <span class="text-xl font-bold text-green-700">${formattedPrice}</span>
     <div class="flex space-x-2">
         <a href="https://wa.me/2348160952082?text=I'd like to book an inspection for ${encodeURIComponent(property.title)}" target="_blank" class="bg-green-100 text-green-700 px-3 py-2 rounded-lg hover:bg-green-200 transition text-sm">
