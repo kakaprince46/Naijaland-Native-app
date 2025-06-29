@@ -2,7 +2,7 @@
 
 /* --- CONFIGURATION --- */
 // Increment the version number to trigger an update and flush the old cache.
-const CACHE_NAME = 'naijaland-cache-v14';
+const CACHE_NAME = 'naijaland-cache-v15';
 const OFFLINE_URL = 'offline.html'; // Ensure this file exists in your root folder.
 
 // List of essential files to cache upon installation.
