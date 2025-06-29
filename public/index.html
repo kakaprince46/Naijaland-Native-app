@@ -1864,6 +1864,8 @@
             document.addEventListener('click', function (e) {
                 // View Details Button
                 if (e.target.classList.contains('view-details') || e.target.closest('.view-details')) {
+                    
+                    /* <-- ADD THIS LINE to start the comment
                     const user = auth.currentUser;
                     if (!user) {
                         showLoginModal();
@@ -1876,6 +1878,7 @@
                         // For example, show a modal with more details.
                         console.log("Viewing details for property:", propertyId);
                     }
+                    */  // <-- ADD THIS LINE to end the comment
                 }
 
                 // Pay buttons
