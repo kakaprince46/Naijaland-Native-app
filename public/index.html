@@ -759,6 +759,36 @@
                     </button>
                 </div>
 
+                <div class="mb-6 p-4 bg-gray-100 rounded-lg border border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Pay via Bank Transfer:</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Bank Name:</span>
+                            <span class="font-medium text-gray-900">United Bank Of Africa</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Account Name:</span>
+                            <div class="flex items-center space-x-2">
+                                <span id="bank-account-name" class="font-medium text-gray-900">Prince Kaka Global
+                                    Resources</span>
+                                <i id="copy-account-name-btn"
+                                    class="far fa-copy text-gray-500 cursor-pointer hover:text-green-700"
+                                    title="Copy Account Name"></i>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Account Number:</span>
+                            <div class="flex items-center space-x-2">
+                                <span id="bank-account-number" class="font-medium text-gray-900">1028081103</span>
+                                <i id="copy-account-number-btn"
+                                    class="far fa-copy text-gray-500 cursor-pointer hover:text-green-700"
+                                    title="Copy Account Number"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-xs text-center text-red-600 mt-4">After payment, please fill the form below and
+                        upload your receipt.</p>
+                </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2">Select Property</label>
                     <select id="receipt-property-select" class="w-full p-3 border rounded-lg">
@@ -1013,6 +1043,37 @@
             </div>
         </div>
     </div>
+    <div id="payment-choice-modal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-sm auth-form">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-green-800">Choose Payment Method</h2>
+                    <button id="close-payment-choice-modal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="text-center mb-6">
+                    <p>How would you like to pay for <strong id="choice-property-title">this property</strong>?</p>
+                </div>
+                <div class="space-y-4">
+                    <button id="choice-paystack-btn"
+                        class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition flex items-center justify-center text-lg">
+                        <i class="fas fa-credit-card mr-3"></i> Pay with Paystack (Online)
+                    </button>
+                    <button id="choice-transfer-btn"
+                        class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition flex items-center justify-center text-lg">
+                        <i class="fas fa-university mr-3"></i> Pay via Bank Transfer
+                    </button>
+                </div>
+                <div class="mt-6 text-center text-sm text-gray-600">
+                    <p><i class="fas fa-info-circle mr-1"></i>You will be directed to the appropriate section based on
+                        your
+                        choice.</p>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         // DOM Elements
         const app = {
@@ -1044,6 +1105,9 @@
 
             // Sell property
             sellPropertyModal: document.getElementById('sell-property-modal'),
+
+            // DOWN - Add the new payment choice modal reference
+            paymentChoiceModal: document.getElementById('payment-choice-modal'),
 
             // Admin
             adminControls: document.getElementById('admin-controls'),
@@ -1583,11 +1647,11 @@
 
             if (investments.length === 0) {
                 app.myInvestmentsList.innerHTML = `
-                        <div class="text-center py-8 text-gray-500">
-                            <i class="fas fa-folder-open text-4xl mb-2"></i>
-                            <p>You don't have any land investments yet</p>
-                        </div>
-                    `;
+                                <div class="text-center py-8 text-gray-500">
+                                    <i class="fas fa-folder-open text-4xl mb-2"></i>
+                                    <p>You don't have any land investments yet</p>
+                                </div>
+                            `;
                 return;
             }
 
@@ -1619,49 +1683,49 @@
                 const card = document.createElement('div');
                 card.className = 'owned-property bg-white p-4 rounded-lg shadow-md transition duration-300';
                 card.innerHTML = `
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-lg font-bold text-green-800">${investment.title}</h3>
-                            ${statusBadge}
-                        </div>
-                        <div class="grid grid-cols-2 gap-2 mb-3">
-                            <div>
-                                <p class="text-sm text-gray-500">Purchase Price</p>
-                                <p class="font-medium">${formattedPrice}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-500">Purchase Date</p>
-                                <p class="font-medium">${investment.purchaseDate}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-500">Plots</p>
-                                <p class="font-medium">${investment.plots || 'N/A'}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-500">Location</p>
-                                <p class="font-medium">${investment.location}</p>
-                            </div>
-                        </div>
-                        <div class="flex space-x-2">
-                            ${(investment.status === 'owned' || investment.status === 'payment_verified') ? `
-                                <button class="sell-property bg-red-100 text-red-700 px-4 py-2 rounded hover:bg-red-200 transition text-sm" data-id="${investment.id}">
-                                    <i class="fas fa-hand-holding-usd mr-1"></i> Sell
-                                </button>
-                            ` : ''}
-                            <button class="view-investment-details bg-blue-100 text-blue-700 px-4 py-2 rounded hover:bg-blue-200 transition text-sm" data-id="${investment.propertyId}">
-                                <i class="fas fa-eye mr-1"></i> View Details
-                            </button>
-                        </div>
-                        <div class="mt-3 pt-3 border-t">
-                            ${investment.receipt ? `
-                                <p class="text-sm text-gray-500">Payment Verified</p>
-                                <button class="view-receipt bg-blue-100 text-blue-700 px-4 py-2 rounded hover:bg-blue-200 transition text-sm mt-2" data-id="${investment.id}">
-                                    <i class="fas fa-receipt mr-1"></i> View Receipt
-                                </button>
-                            ` : `
-                                <p class="text-sm text-gray-500">Pending Verification</p>
-                            `}
-                        </div>
-                    `;
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="text-lg font-bold text-green-800">${investment.title}</h3>
+                                    ${statusBadge}
+                                </div>
+                                <div class="grid grid-cols-2 gap-2 mb-3">
+                                    <div>
+                                        <p class="text-sm text-gray-500">Purchase Price</p>
+                                        <p class="font-medium">${formattedPrice}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500">Purchase Date</p>
+                                        <p class="font-medium">${investment.purchaseDate}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500">Plots</p>
+                                        <p class="font-medium">${investment.plots || 'N/A'}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500">Location</p>
+                                        <p class="font-medium">${investment.location}</p>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    ${(investment.status === 'owned' || investment.status === 'payment_verified') ? `
+                                        <button class="sell-property bg-red-100 text-red-700 px-4 py-2 rounded hover:bg-red-200 transition text-sm" data-id="${investment.id}">
+                                            <i class="fas fa-hand-holding-usd mr-1"></i> Sell
+                                        </button>
+                                    ` : ''}
+                                    <button class="view-investment-details bg-blue-100 text-blue-700 px-4 py-2 rounded hover:bg-blue-200 transition text-sm" data-id="${investment.propertyId}">
+                                        <i class="fas fa-eye mr-1"></i> View Details
+                                    </button>
+                                </div>
+                                <div class="mt-3 pt-3 border-t">
+                                    ${investment.receipt ? `
+                                        <p class="text-sm text-gray-500">Payment Verified</p>
+                                        <button class="view-receipt bg-blue-100 text-blue-700 px-4 py-2 rounded hover:bg-blue-200 transition text-sm mt-2" data-id="${investment.id}">
+                                            <i class="fas fa-receipt mr-1"></i> View Receipt
+                                        </button>
+                                    ` : `
+                                        <p class="text-sm text-gray-500">Pending Verification</p>
+                                    `}
+                                </div>
+                            `;
 
                 app.myInvestmentsList.appendChild(card);
             });
@@ -1784,6 +1848,45 @@
             document.getElementById('close-sell-modal').addEventListener('click', () => app.sellPropertyModal.classList.add('hidden'));
             document.getElementById('submit-sale').addEventListener('click', listPropertyForSale);
 
+            // DOWN - Add event listeners for the new payment choice modal
+            document.getElementById('close-payment-choice-modal').addEventListener('click', () => app.paymentChoiceModal.classList.add('hidden'));
+            document.getElementById('choice-paystack-btn').addEventListener('click', (e) => {
+                const propertyId = e.currentTarget.dataset.propertyId;
+                app.paymentChoiceModal.classList.add('hidden'); // Hide the choice modal
+
+                // Now, trigger the original Paystack payment modal
+                getProperty(propertyId).then(property => {
+                    if (property) {
+                        document.getElementById('payment-property').value = property.id;
+                        document.getElementById('payment-price-per-plot').value = property.price;
+                        document.getElementById('payment-plots').value = '1'; // Default to 1 plot
+                        calculatePaymentAmount(); // Calculate the total amount
+                        document.getElementById('payment-email').value = auth.currentUser?.email || '';
+                        app.paymentModal.classList.remove('hidden'); // Show the Paystack modal
+                    }
+                });
+            });
+            document.getElementById('choice-transfer-btn').addEventListener('click', (e) => {
+                const propertyId = e.currentTarget.dataset.propertyId;
+                app.paymentChoiceModal.classList.add('hidden'); // Hide the choice modal
+
+                // Now, trigger the existing "Upload Receipt" modal
+                showReceiptModal();
+
+                // Pre-select the property in the receipt modal
+                // We need a slight delay for the property list to populate in showReceiptModal
+                setTimeout(() => {
+                    const receiptPropertySelect = document.getElementById('receipt-property-select');
+                    if (receiptPropertySelect) {
+                        receiptPropertySelect.value = propertyId;
+                        // Manually trigger the 'onchange' event to update the price fields
+                        const event = new Event('change');
+                        receiptPropertySelect.dispatchEvent(event);
+                    }
+                }, 500); // 500ms should be enough for properties to load
+            });
+            // UP
+
             // Admin controls
             document.getElementById('update-investments').addEventListener('click', updateAllInvestments);
             document.getElementById('add-property').addEventListener('click', () => app.addPropertyModal.classList.remove('hidden'));
@@ -1846,6 +1949,48 @@
             document.getElementById('receipt-file').addEventListener('change', handleReceiptFileSelect);
             document.getElementById('submit-receipt').addEventListener('click', uploadReceipt);
 
+            // ================================================================
+            // START: THIS IS THE JAVASCRIPT CODE THAT WAS ADDED
+            // It makes the copy icons interactive.
+            // ================================================================
+
+            // Copy Bank Account Name
+            document.getElementById('copy-account-name-btn').addEventListener('click', () => {
+                // Get the text from the span with the ID 'bank-account-name'
+                const textToCopy = document.getElementById('bank-account-name').textContent;
+
+                // Use the browser's Clipboard API to copy the text
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    // If successful, show a confirmation message using the existing showToast function
+                    showToast('Account Name copied!', 'success');
+                }).catch(err => {
+                    // If it fails, log the error and show an error message
+                    console.error('Failed to copy text: ', err);
+                    showToast('Failed to copy', 'error');
+                });
+            });
+
+            // Copy Bank Account Number
+            document.getElementById('copy-account-number-btn').addEventListener('click', () => {
+                // Get the text from the span with the ID 'bank-account-number'
+                const textToCopy = document.getElementById('bank-account-number').textContent;
+
+                // Use the browser's Clipboard API to copy the text
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    // If successful, show a confirmation message
+                    showToast('Account Number copied!', 'success');
+                }).catch(err => {
+                    // If it fails, log the error and show an error message
+                    console.error('Failed to copy text: ', err);
+                    showToast('Failed to copy', 'error');
+                });
+            });
+
+            // ================================================================
+            // END OF THE ADDED JAVASCRIPT CODE
+            // ================================================================
+
+
             // Password toggle
             document.querySelectorAll('.password-toggle').forEach(button => {
                 button.addEventListener('click', function () {
@@ -1884,18 +2029,11 @@
 
                 // Pay buttons
                 if (e.target.classList.contains('pay-button') || e.target.closest('.pay-button')) {
+                    // DOWN - New logic to show payment choice
                     const button = e.target.classList.contains('pay-button') ? e.target : e.target.closest('.pay-button');
                     const propertyId = button.dataset.id;
-                    getProperty(propertyId).then(property => {
-                        if (property) {
-                            document.getElementById('payment-property').value = property.id;
-                            document.getElementById('payment-price-per-plot').value = property.price;
-                            document.getElementById('payment-plots').value = '';
-                            document.getElementById('payment-amount').value = '';
-                            document.getElementById('payment-email').value = auth.currentUser?.email || '';
-                            app.paymentModal.classList.remove('hidden');
-                        }
-                    });
+                    showPaymentChoiceModal(propertyId);
+                    // UP
                 }
 
                 // Sell property buttons from investment list
@@ -1952,6 +2090,26 @@
             app.authMessage.classList.add('hidden');
             document.getElementById('auth-modal-title').textContent = 'Forgot Password';
         }
+        // DOWN - Add this new function to show the payment choice modal
+        function showPaymentChoiceModal(propertyId) {
+            getProperty(propertyId).then(property => {
+                if (!property) {
+                    showToast("Property details could not be loaded.", "error");
+                    return;
+                }
+
+                // Store property ID and title on the modal buttons for later use
+                document.getElementById('choice-paystack-btn').dataset.propertyId = propertyId;
+                document.getElementById('choice-transfer-btn').dataset.propertyId = propertyId;
+
+                // Update the modal title to be more specific
+                document.getElementById('choice-property-title').textContent = property.title;
+
+                // Show the modal
+                app.paymentChoiceModal.classList.remove('hidden');
+            });
+        }
+        // UP
 
         // [CORRECTED] Show receipt upload modal
         async function showReceiptModal() {
@@ -2177,64 +2335,64 @@
 
                 if (receipt.fileType.includes('image')) {
                     modal.innerHTML = `
-                                <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl auth-form">
-                                    <div class="p-6">
-                                        <div class="flex justify-between items-center mb-4">
-                                            <h2 class="text-2xl font-bold text-green-800">Payment Receipt</h2>
-                                            <button class="close-receipt-view text-gray-500 hover:text-gray-700">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                        
-                                        <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div>
-                                                <p class="text-sm text-gray-500">Amount Paid</p>
-                                                <p class="font-medium">₦${receipt.amount.toLocaleString()}</p>
+                                        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl auth-form">
+                                            <div class="p-6">
+                                                <div class="flex justify-between items-center mb-4">
+                                                    <h2 class="text-2xl font-bold text-green-800">Payment Receipt</h2>
+                                                    <button class="close-receipt-view text-gray-500 hover:text-gray-700">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                               
+                                                <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div>
+                                                        <p class="text-sm text-gray-500">Amount Paid</p>
+                                                        <p class="font-medium">₦${receipt.amount.toLocaleString()}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p class="text-sm text-gray-500">Payment Date</p>
+                                                        <p class="font-medium">${paymentDate}</p>
+                                                    </div>
+                                                </div>
+                                               
+                                                <div class="border rounded-lg p-2">
+                                                    <img src="data:${receipt.fileType};base64,${receipt.base64Data}" alt="Payment Receipt" class="max-h-[70vh] mx-auto">
+                                                </div>
                                             </div>
-                                            <div>
-                                                <p class="text-sm text-gray-500">Payment Date</p>
-                                                <p class="font-medium">${paymentDate}</p>
-                                            </div>
                                         </div>
-                                        
-                                        <div class="border rounded-lg p-2">
-                                            <img src="data:${receipt.fileType};base64,${receipt.base64Data}" alt="Payment Receipt" class="max-h-[70vh] mx-auto">
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
+                                    `;
                 } else {
                     modal.innerHTML = `
-                                <div class="bg-white rounded-lg shadow-xl w-full max-w-md auth-form">
-                                    <div class="p-6">
-                                        <div class="flex justify-between items-center mb-4">
-                                            <h2 class="text-2xl font-bold text-green-800">Payment Receipt</h2>
-                                            <button class="close-receipt-view text-gray-500 hover:text-gray-700">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                        
-                                        <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div>
-                                                <p class="text-sm text-gray-500">Amount Paid</p>
-                                                <p class="font-medium">₦${receipt.amount.toLocaleString()}</p>
+                                        <div class="bg-white rounded-lg shadow-xl w-full max-w-md auth-form">
+                                            <div class="p-6">
+                                                <div class="flex justify-between items-center mb-4">
+                                                    <h2 class="text-2xl font-bold text-green-800">Payment Receipt</h2>
+                                                    <button class="close-receipt-view text-gray-500 hover:text-gray-700">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                               
+                                                <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div>
+                                                        <p class="text-sm text-gray-500">Amount Paid</p>
+                                                        <p class="font-medium">₦${receipt.amount.toLocaleString()}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p class="text-sm text-gray-500">Payment Date</p>
+                                                        <p class="font-medium">${paymentDate}</p>
+                                                    </div>
+                                                </div>
+                                               
+                                                <div class="text-center py-8">
+                                                    <i class="fas fa-file-pdf text-5xl text-red-500 mb-4"></i>
+                                                    <p class="mb-4">PDF receipt uploaded</p>
+                                                    <button class="download-receipt bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition" data-id="${investmentId}">
+                                                        <i class="fas fa-download mr-2"></i> Download Receipt
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <p class="text-sm text-gray-500">Payment Date</p>
-                                                <p class="font-medium">${paymentDate}</p>
-                                            </div>
                                         </div>
-                                        
-                                        <div class="text-center py-8">
-                                            <i class="fas fa-file-pdf text-5xl text-red-500 mb-4"></i>
-                                            <p class="mb-4">PDF receipt uploaded</p>
-                                            <button class="download-receipt bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition" data-id="${investmentId}">
-                                                <i class="fas fa-download mr-2"></i> Download Receipt
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
+                                    `;
                 }
 
                 document.body.appendChild(modal);
@@ -2911,10 +3069,10 @@
                 const typingIndicator = document.createElement('div');
                 typingIndicator.classList.add('flex', 'mb-4', 'typing-indicator');
                 typingIndicator.innerHTML = `
-                        <div class="bg-green-100 text-green-800 p-3 rounded-lg max-w-xs">
-                            <p class="animate-pulse">NaijaLand Assistant is typing...</p>
-                        </div>
-                    `;
+                                <div class="bg-green-100 text-green-800 p-3 rounded-lg max-w-xs">
+                                    <p class="animate-pulse">NaijaLand Assistant is typing...</p>
+                                </div>
+                            `;
                 messagesContainer.appendChild(typingIndicator);
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
