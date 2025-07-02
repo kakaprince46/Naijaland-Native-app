@@ -2590,11 +2590,11 @@
                 await user.updateProfile({
                     displayName: name
                 });
-                await db.collection('users').doc(user.uid).update({
+                await db.collection('users').doc(user.uid).set({
                     name: name,
                     phone: phone,
                     location: location
-                });
+                }, { merge: true }); // <-- Apply this change
 
                 document.getElementById('user-name').textContent = name;
                 document.getElementById('account-name').textContent = name;
