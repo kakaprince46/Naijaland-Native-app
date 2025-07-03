@@ -116,14 +116,22 @@
         }
 
         @keyframes shimmer {
-            0% {
-                background-position: -200% 0;
-            }
+    0% {
+        background-position: -200% 0;
+    }
 
-            100% {
-                background-position: 200% 0;
-            }
-        }
+    100% {
+        background-position: 200% 0;
+    }
+} /* <-- The animation block ends here */
+
+/* Move the rule to here, outside the block */
+#receipt-preview-image {
+    max-height: 200px;
+    width: auto;
+    margin: 0 auto;
+}
+    
     </style>
 </head>
 
@@ -388,16 +396,12 @@
                     <div>
                         <h3 class="text-xl font-bold mb-4">Quick Links</h3>
                         <ul class="space-y-2">
-                            <li><a href="https://www.naijaland.site/faq/"
-                                    class="hover:text-green-400 transition">FAQ</a></li>
-                            <li><a href="https://www.naijaland.site"
-                                    class="hover:text-green-400 transition">Properties</a></li>
-                            <li><a href="https://www.naijaland.site/about/"
-                                    class="hover:text-green-400 transition">About Us</a>
+                            <li><a href="https://www.naijaland.site/faq/" class="hover:text-green-400 transition">FAQ</a></li>
+                            <li><a href="https://www.naijaland.site" class="hover:text-green-400 transition">Properties</a></li>
+                            <li><a href="https://www.naijaland.site/about/" class="hover:text-green-400 transition">About Us</a>
                             </li>
                             <li>
-                                <a href="https://wa.me/2348160952082" target="_blank"
-                                    class="hover:text-green-400 transition">
+                                <a href="https://wa.me/2348160952082" target="_blank" class="hover:text-green-400 transition">
                                     Message Us on WhatsApp
                                 </a>
                             </li>
@@ -406,8 +410,14 @@
                                     Email Us
                                 </a>
                             </li>
+                            <li>
+                                <a href="https://web.facebook.com/princekaka46/?_rdc=1&_rdr#" target="_blank"
+                                    class="hover:text-green-400 transition">
+                                    <i class="fab fa-facebook"></i> Facebook
+                                </a>
+                            </li>
                         </ul>
-                    </div>
+                        </div>
                     <div>
                         <h3 class="text-xl font-bold mb-4">Legal</h3>
                         <ul class="space-y-2">
@@ -750,15 +760,17 @@
     </div>
 
     <div id="receipt-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-md auth-form">
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-bold text-green-800">Upload Payment Receipt</h2>
-                    <button id="close-receipt-modal" class="text-gray-500 hover:text-gray-700">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md auth-form flex flex-col max-h-[90vh]">
+    
+            <div class="flex justify-between items-center p-6 border-b">
+                <h2 class="text-2xl font-bold text-green-800">Upload Payment Receipt</h2>
+                <button id="close-receipt-modal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+    
+            <div class="p-6 overflow-y-auto">
+    
                 <div class="mb-6 p-4 bg-gray-100 rounded-lg border border-gray-200">
                     <h3 class="text-lg font-semibold text-gray-800 mb-3">Pay via Bank Transfer:</h3>
                     <div class="space-y-2 text-sm">
@@ -786,21 +798,22 @@
                             </div>
                         </div>
                     </div>
-                    <p class="text-xs text-center text-red-600 mt-4">After payment, please fill the form below and
-                        upload your receipt.</p>
+                    <p class="text-xs text-center text-red-600 mt-4">After payment, please fill the form below and upload
+                        your receipt.</p>
                 </div>
+    
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2">Select Property</label>
                     <select id="receipt-property-select" class="w-full p-3 border rounded-lg">
                         <option value="">-- Select Available Property --</option>
                     </select>
                 </div>
-
+    
                 <div class="grid grid-cols-2 gap-4 mb-4">
                     <div>
                         <label class="block text-gray-700 mb-2">Price per Plot (₦)</label>
-                        <input type="number" id="receipt-price-per-plot"
-                            class="w-full p-3 border rounded-lg bg-gray-100" readonly>
+                        <input type="number" id="receipt-price-per-plot" class="w-full p-3 border rounded-lg bg-gray-100"
+                            readonly>
                     </div>
                     <div>
                         <label class="block text-gray-700 mb-2">Number of Plots</label>
@@ -808,13 +821,13 @@
                             placeholder="Enter plots" min="1">
                     </div>
                 </div>
-
+    
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2">Upload Receipt</label>
                     <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
                         <input type="file" id="receipt-file" accept="image/*,.pdf" class="hidden">
                         <div id="receipt-preview" class="hidden mb-2">
-                            <img id="receipt-preview-image" src="#" alt="Receipt preview" class="max-h-40 mx-auto">
+                            <img id="receipt-preview-image" src="#" alt="Receipt preview">
                         </div>
                         <button id="choose-receipt"
                             class="bg-gray-100 text-gray-700 px-4 py-2 rounded hover:bg-gray-200 transition">
@@ -823,27 +836,29 @@
                         <p class="text-sm text-gray-500 mt-2">PNG, JPG, or PDF (Max 5MB)</p>
                     </div>
                 </div>
-
+    
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2">Actual Amount Paid (₦)</label>
                     <input type="number" id="receipt-amount" class="w-full p-3 border rounded-lg"
                         placeholder="Enter amount paid">
                 </div>
-
                 <div class="mb-6">
                     <label class="block text-gray-700 mb-2">Payment Date</label>
                     <input type="date" id="receipt-date" class="w-full p-3 border rounded-lg">
                 </div>
-
+    
+            </div>
+    
+            <div class="p-6 border-t mt-auto bg-white">
                 <button id="submit-receipt"
                     class="w-full bg-green-700 text-white py-3 rounded-lg hover:bg-green-800 transition flex items-center justify-center">
                     <i class="fas fa-upload mr-2"></i> Submit for Verification
                 </button>
-
                 <div id="receipt-message" class="hidden mt-4 p-3 rounded-lg text-center"></div>
             </div>
+    
         </div>
-    </div>
+        </div>
 
     <div id="terms-modal"
         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden overflow-y-auto">
