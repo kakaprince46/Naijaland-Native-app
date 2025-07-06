@@ -69,6 +69,19 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
 
+        /* =========== ANNOUNCEMENT BAR CSS START =========== */
+    #announcement-bar {
+        position: sticky;
+        top: 0;
+        z-index: 1000; /* Ensures it stays on top of other content */
+        transition: transform 0.3s ease-in-out;
+    }
+
+    #announcement-bar.hidden {
+        transform: translateY(-100%);
+    }
+    /* =========== ANNOUNCEMENT BAR CSS END =========== */
+
         .auth-form {
             animation: fadeIn 0.3s ease-in-out;
         }
@@ -136,6 +149,15 @@
 </head>
 
 <body class="bg-gray-50 font-sans">
+
+    <div id="announcement-bar" class="bg-yellow-400 text-yellow-900 text-center p-2 relative">
+        <p class="font-medium">
+            <i class="fas fa-bullhorn mr-2"></i>
+            Inspection is Free! <a href="https://wa.me/2348160952082" target="_blank"
+                class="underline hover:text-yellow-700">Book a site visit today.</a>
+        </p>
+        <button id="close-announcement" class="absolute top-0 right-0 mt-2 mr-4 text-lg font-bold">&times;</button>
+    </div>
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyDiaGKYPC9aGX7f6mbFgcce1KlWzF-popo",
@@ -3136,6 +3158,19 @@
             });
         });
     </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const announcementBar = document.getElementById('announcement-bar');
+        const closeButton = document.getElementById('close-announcement');
+
+        if (closeButton) {
+            closeButton.addEventListener('click', () => {
+                announcementBar.classList.add('hidden');
+            });
+        }
+    });
+</script>
 </body>
 
 </html>
