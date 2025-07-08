@@ -774,6 +774,12 @@
                         placeholder="Enter image URL">
                 </div>
 
+                <div class="mb-6">
+                    <label class="block text-gray-700 mb-2">Facebook Video Link (Optional)</label>
+                    <input type="url" id="property-video-link" class="w-full p-3 border rounded-lg"
+                        placeholder="e.g., https://www.facebook.com/watch/?v=12345">         
+                </div>
+
                 <button id="submit-property"
                     class="w-full bg-green-700 text-white py-3 rounded-lg hover:bg-green-800 transition flex items-center justify-center">
                     <i class="fas fa-plus mr-2"></i> Add Property
@@ -2844,40 +2850,63 @@
 
         // Add new property (admin function)
         async function addNewProperty() {
-            const title = document.getElementById('property-title').value;
-            const price = document.getElementById('property-price').value;
-            const sqm = document.getElementById('property-sqm').value;
-            const location = document.getElementById('property-location').value;
-            const description = document.getElementById('property-description').value;
-            const image = document.getElementById('property-image').value;
+                const title = document.getElementById('property-title').value;
+                const price = document.getElementById('property-price').value;
+                const sqm = document.getElementById('property-sqm').value;
+                const location = document.getElementById('property-location').value;
+                const description = document.getElementById('property-description').value;
+                const image = document.getElementById('property-image').value;
+                const videoLink = document.getElementById('property-video-link').value;
 
-            if (!title || !price || !sqm || !location || !description) { showPropertyMessage('Please fill in all required fields', 'error'); return; }
+                if (!title || !price || !sqm || !location || !description) {
+                    showPropertyMessage('Please fill in all required fields', 'error');
+                    return;
+                }
 
-            const submitButton = document.getElementById('submit-property');
-            const originalText = submitButton.innerHTML;
-            submitButton.disabled = true;
-            submitButton.innerHTML = '<div class="loading-spinner mx-auto"></div> Adding...';
+                const submitButton = document.getElementById('submit-property');
+                const originalText = submitButton.innerHTML;
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<div class="loading-spinner mx-auto"></div> Adding...';
 
-            try {
-                await db.collection('properties').add({
-                    title: title,
-                    price: parseFloat(price),
-                    sqm: parseFloat(sqm),
-                    location: location,
-                    description: description,
-                    image: image || "https://i.postimg.cc/RC3ZS7gj/apex-1.jpg",
-                    status: "available",
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                showPropertyMessage(`New property "${title}" has been added`, 'success');
-                loadProperties(true);
-                document.getElementById('add-property-modal').reset();
-                setTimeout(() => { app.addPropertyModal.classList.add('hidden'); }, 1500);
-            } catch (error) {
-                showPropertyMessage('Error adding property: ' + error.message, 'error');
-            } finally {
-                submitButton.disabled = false;
-                submitButton.innerHTML = originalText;
+                try {
+                    // 1. Create a single data object to hold all property information
+                    const propertyData = {
+                        title: title,
+                        price: parseFloat(price),
+                        sqm: parseFloat(sqm),
+                        location: location,
+                        description: description,
+                        image: image || "https://i.postimg.cc/RC3ZS7gj/apex-1.jpg",
+                        status: "available",
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+
+                    // 2. If a video link was entered, add it to the data object
+                    if (videoLink) {
+                        propertyData.videoLink = videoLink;
+                    }
+
+                    // 3. Save the single, complete data object to Firestore ONLY ONCE
+                    await db.collection('properties').add(propertyData);
+
+                    showPropertyMessage(`New property "${title}" has been added`, 'success');
+                    loadProperties(true);
+
+                    // 4. Correctly reset the form fields by clearing their values
+                    document.getElementById('property-title').value = '';
+                    document.getElementById('property-price').value = '';
+                    document.getElementById('property-sqm').value = '';
+                    document.getElementById('property-location').value = '';
+                    document.getElementById('property-description').value = '';
+                    document.getElementById('property-image').value = '';
+                    document.getElementById('property-video-link').value = '';
+
+                    setTimeout(() => { app.addPropertyModal.classList.add('hidden'); }, 1500);
+                } catch (error) {
+                    showPropertyMessage('Error adding property: ' + error.message, 'error');
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalText;
             }
         }
 
