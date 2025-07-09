@@ -410,7 +410,7 @@
 
         <footer class="bg-gray-800 text-white py-8">
             <div class="container mx-auto px-4">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div>
                         <h3 class="text-xl font-bold mb-4">NaijaLand</h3>
                         <p>Your trusted real estate consultant, we help you build wealth through real estate.</p>
@@ -454,10 +454,23 @@
                                     Estimator</a></li>
                         </ul>
                     </div>
-                </div>
-                <div class="border-t border-gray-700 mt-8 pt-6 text-center">
-                    <p>&copy; 2025 Prince Kaka Global Resources. All rights reserved.</p>
-                </div>
+
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">Get Promo Alerts</h3>
+                        <p class="mb-4">Subscribe for exclusive deals and property updates.</p>
+                        <div class="flex">
+                            <input type="email" id="subscribe-email" placeholder="Your email address"
+                                class="w-full p-2 rounded-l-lg text-gray-800 focus:outline-none">
+                            <button id="subscribe-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-r-lg transition">
+                                Subscribe
+                            </button>
+                        </div>
+                        <div id="subscribe-message" class="mt-2 text-sm"></div>
+                    </div>
+                    </div>
+                    <div class="border-t border-gray-700 mt-8 pt-6 text-center">
+                        <p>&copy; 2025 Prince Kaka Global Resources. All rights reserved.</p>
+                    </div>
             </div>
         </footer>
     </div>
@@ -1188,6 +1201,18 @@
             publicKey: 'pk_live_87802cb3f016f04f2b8b797eb69e4e8cc68f0bce', // Your Paystack LIVE public key
         };
 
+        // 👇 PASTE THE FUNCTION RIGHT HERE 👇
+            function createSlug(title, location) {
+                const str = `${title} ${location}`;
+                return str
+                    .toLowerCase()
+                    .replace(/\s+/g, '-')           // Replace spaces with -
+                    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+                    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+                    .replace(/^-+/, '')             // Trim - from start of text
+                    .replace(/-+$/, '');            // Trim - from end of text
+            }
+
         // ===================================
         // NEW FUNCTION TO UPDATE META TAGS
         // ===================================
@@ -1226,8 +1251,8 @@
 
                 let ogUrl = document.querySelector('meta[property="og:url"]');
                 if (ogUrl) {
-                    // Point the URL to the new property detail page
-                    ogUrl.setAttribute('content', `${window.location.origin}/property.html?id=${property.id}`);
+                    // Point the URL to the new property detail page using the slug
+                    ogUrl.setAttribute('content', `${window.location.origin}/property/${property.slug}`);
                 }
 
                 // Update Twitter Card tags
@@ -1521,9 +1546,9 @@
         <div class="flex justify-between items-center">
             <span class="text-xl font-bold text-green-700">${formattedPrice}</span>
             <div class="flex items-center space-x-2">
-                <a href="/property.html?id=${property.id}" class="view-details bg-gray-200 text-gray-800 px-3 py-2 rounded-lg hover:bg-gray-300 transition text-sm" data-id="${property.id}">
-                    View Details
-                </a>
+                <a href="/property/${property.slug}" class="view-details bg-gray-200 text-gray-800 px-3 py-2 rounded-lg hover:bg-gray-300 transition text-sm" data-id="${property.id}">
+    View Details
+</a>
                 <a href="https://wa.me/2348160952082?text=I'd like to book an inspection for ${encodeURIComponent(property.title)}" 
                     target="_blank" 
                     class="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition text-sm flex items-center">
@@ -2036,6 +2061,9 @@
             // END OF THE ADDED JAVASCRIPT CODE
             // ================================================================
 
+            // =========== NEW SUBSCRIPTION EVENT LISTENER START ===========
+            document.getElementById('subscribe-btn').addEventListener('click', handleSubscription);
+            // =========== NEW SUBSCRIPTION EVENT LISTENER END ===========
 
             // Password toggle
             document.querySelectorAll('.password-toggle').forEach(button => {
@@ -2103,6 +2131,50 @@
                 }
             });
         }
+
+        // =========== NEW SUBSCRIPTION HANDLER FUNCTION START ===========
+            async function handleSubscription() {
+                // ⬇️ PASTE THE WEB APP URL YOU COPIED FROM GOOGLE APPS SCRIPT HERE ⬇️
+                const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwUq8o-0-MjUaLkYfMt777FGqyV--OzsqfApGfI24DIJWmFuE8syD4P6n3_a8xANAqJ/exec';
+
+                const emailInput = document.getElementById('subscribe-email');
+                const email = emailInput.value;
+                const messageDiv = document.getElementById('subscribe-message');
+                const subscribeBtn = document.getElementById('subscribe-btn');
+
+                if (!email || !email.includes('@')) {
+                    messageDiv.textContent = 'Please enter a valid email address.';
+                    messageDiv.className = 'mt-2 text-sm text-red-400';
+                    return;
+                }
+
+                subscribeBtn.disabled = true;
+                subscribeBtn.textContent = '...';
+
+                try {
+                    // This sends the data to your Google Script.
+                    const response = await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors', // Required for Google Scripts
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: email }),
+                    });
+
+                    // If the request goes through, assume success.
+                    messageDiv.textContent = 'Thank you for subscribing!';
+                    messageDiv.className = 'mt-2 text-sm text-green-400';
+                    emailInput.value = '';
+
+                } catch (error) {
+                    console.error('Subscription Error:', error);
+                    messageDiv.textContent = 'Could not connect. Please try again.';
+                    messageDiv.className = 'mt-2 text-sm text-red-400';
+                } finally {
+                    subscribeBtn.disabled = false;
+                    subscribeBtn.textContent = 'Subscribe';
+                }
+            }
+            // =========== NEW SUBSCRIPTION HANDLER FUNCTION END ===========
 
         // Show login modal
         function showLoginModal() {
@@ -2869,6 +2941,10 @@
                 submitButton.innerHTML = '<div class="loading-spinner mx-auto"></div> Adding...';
 
                 try {
+
+                    // Generate the slug
+const slug = createSlug(title, location);
+
                     // 1. Create a single data object to hold all property information
                     const propertyData = {
                         title: title,
@@ -2878,6 +2954,7 @@
                         description: description,
                         image: image || "https://i.postimg.cc/RC3ZS7gj/apex-1.jpg",
                         status: "available",
+                        slug: slug, // 👈 ADD THIS LINE
                         createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     };
 
@@ -3038,6 +3115,7 @@
                     });
             });
         }
+    
     </script>
 
     <div id="chatbot-container" class="fixed bottom-5 right-5 z-50">

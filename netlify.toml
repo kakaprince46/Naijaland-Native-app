@@ -1,6 +1,2 @@
 [build]
-  # THIS IS THE LINE THAT WAS MISSING. IT'S THE FIX.
   publish = "public"
-  
-  # You already had this line, which is correct.
-  functions = "netlify/functions"

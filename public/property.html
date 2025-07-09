@@ -45,6 +45,7 @@
                 Properties</a>
         </div>
     </nav>
+
     <div id="property-detail-container" class="container mx-auto px-4 py-8">
         <div class="text-center py-20">
             <p class="text-lg text-gray-600">Loading Property Details...</p>
@@ -69,90 +70,92 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        function updateMetaTags(property, propertyId) {
+        function updateMetaTags(property) {
             if (!property) return;
-            // Update title
+
             document.title = `${property.title} - For Sale in ${property.location} | Naijaland`;
 
-            // Update meta tags
             document.querySelector('meta[name="description"]').setAttribute('content', `Affordable land for sale: ${property.title} in ${property.location}. Size: ${property.sqm} SQM. Price: ₦${property.price.toLocaleString()}. Buy verified property on Naijaland.`);
             document.querySelector('meta[name="keywords"]').setAttribute('content', `land for sale in ${property.location}, ${property.title}, buy land in Nigeria, affordable land, Naijaland`);
-            document.querySelector('link[rel="canonical"]').setAttribute('href', `${window.location.origin}/property.html?id=${propertyId}`);
+            document.querySelector('link[rel="canonical"]').setAttribute('href', `${window.location.href}`);
 
-            // Update Open Graph tags
             document.querySelector('meta[property="og:title"]').setAttribute('content', `${property.title} | Naijaland`);
             document.querySelector('meta[property="og:description"]').setAttribute('content', `Affordable land for sale: ${property.title} in ${property.location}. Size: ${property.sqm} SQM.`);
             document.querySelector('meta[property="og:image"]').setAttribute('content', property.image);
-            document.querySelector('meta[property="og:url"]').setAttribute('content', `${window.location.origin}/property.html?id=${propertyId}`);
+            document.querySelector('meta[property="og:url"]').setAttribute('content', `${window.location.href}`);
 
-            // Update Twitter Card tags
             document.querySelector('meta[property="twitter:title"]').setAttribute('content', `${property.title} | Naijaland`);
             document.querySelector('meta[property="twitter:description"]').setAttribute('content', `Affordable land for sale: ${property.title} in ${property.location}. Size: ${property.sqm} SQM.`);
             document.querySelector('meta[property="twitter:image"]').setAttribute('content', property.image);
         }
 
-        async function getProperty(id) {
+        function renderPropertyDetails(property) {
+            const container = document.getElementById('property-detail-container');
+            const formattedPrice = new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(property.price).replace('NGN', '₦');
+
+            const videoButtonHtml = property.videoLink ? `
+                <a href="${property.videoLink}" target="_blank" class="inline-block bg-red-600 text-white px-8 py-4 rounded-lg hover:bg-red-700 transition text-lg font-semibold">
+                    <i class="fas fa-play-circle mr-2"></i> Watch Video
+                </a>` : '';
+
+            container.innerHTML = `
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden max-w-4xl mx-auto">
+                    <img src="${property.image}" alt="${property.title}" class="w-full h-64 md:h-96 object-cover">
+                    <div class="p-6 md:p-8">
+                        <h1 class="text-3xl md:text-4xl font-bold text-green-800 mb-4">${property.title}</h1>
+                        <div class="flex items-center text-gray-700 text-lg mb-4">
+                            <i class="fas fa-map-marker-alt mr-3 text-green-600"></i>
+                            <span>${property.location}</span>
+                        </div>
+                        <div class="flex items-center text-gray-700 text-lg mb-6">
+                            <i class="fas fa-ruler-combined mr-3 text-green-600"></i>
+                            <span>${property.sqm} SQM</span>
+                        </div>
+                        <p class="text-gray-600 leading-relaxed mb-6">${property.description}</p>
+                        <div class="text-4xl font-bold text-green-700 mb-8">${formattedPrice}</div>
+
+                        <div class="flex flex-wrap gap-4">
+                            <a href="https://wa.me/2348160952082?text=I'm interested in the property: ${encodeURIComponent(property.title)} (Slug: ${property.slug})" target="_blank"
+                               class="inline-block bg-green-600 text-white px-8 py-4 rounded-lg hover:bg-green-700 transition text-lg font-semibold">
+                                <i class="fab fa-whatsapp mr-2"></i> Book Inspection
+                            </a>
+                            ${videoButtonHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function getPropertyBySlug(slug) {
             try {
-                const doc = await db.collection('properties').doc(id).get();
-                return doc.exists ? { id: doc.id, ...doc.data() } : null;
+                const query = db.collection('properties').where('slug', '==', slug).limit(1);
+                const snapshot = await query.get();
+
+                if (snapshot.empty) {
+                    document.getElementById('property-detail-container').innerHTML = '<p class="text-center text-2xl text-red-500 font-semibold">Property not found.</p>';
+                    document.title = "Property Not Found | Naijaland";
+                    return;
+                }
+
+                const propertyDoc = snapshot.docs[0];
+                const property = { id: propertyDoc.id, ...propertyDoc.data() };
+
+                renderPropertyDetails(property);
+                updateMetaTags(property);
             } catch (error) {
-                console.error("Error getting property:", error);
-                return null;
+                console.error("Error getting property by slug:", error);
+                document.getElementById('property-detail-container').innerHTML = '<p class="text-center text-2xl text-red-500 font-semibold">Error loading property.</p>';
             }
         }
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const propertyId = urlParams.get('id');
-            const container = document.getElementById('property-detail-container');
+        document.addEventListener('DOMContentLoaded', () => {
+            const path = window.location.pathname;
+            const slug = path.split('/').pop();
 
-            if (propertyId) {
-                const property = await getProperty(propertyId);
-                if (property) {
-                    // Update meta tags for SEO and social sharing
-                    updateMetaTags(property, propertyId);
-
-                    const formattedPrice = new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(property.price).replace('NGN', '₦');
-
-                    // Conditionally create the video button's HTML.
-                    // If property.videoLink exists, it creates the button. Otherwise, it's an empty string.
-                    const videoButtonHtml = property.videoLink ? `
-                        <a href="${property.videoLink}" target="_blank" class="inline-block bg-red-600 text-white px-8 py-4 rounded-lg hover:bg-red-700 transition text-lg font-semibold">
-                            <i class="fas fa-play-circle mr-2"></i> Watch Video
-                        </a>
-                    ` : '';
-
-                    container.innerHTML = `
-                        <div class="bg-white rounded-lg shadow-lg overflow-hidden max-w-4xl mx-auto">
-                            <img src="${property.image}" alt="${property.title}" class="w-full h-64 md:h-96 object-cover">
-                            <div class="p-6 md:p-8">
-                                <h1 class="text-3xl md:text-4xl font-bold text-green-800 mb-4">${property.title}</h1>
-                                <div class="flex items-center text-gray-700 text-lg mb-4">
-                                    <i class="fas fa-map-marker-alt mr-3 text-green-600"></i>
-                                    <span>${property.location}</span>
-                                </div>
-                                <div class="flex items-center text-gray-700 text-lg mb-6">
-                                    <i class="fas fa-ruler-combined mr-3 text-green-600"></i>
-                                    <span>${property.sqm} SQM</span>
-                                </div>
-                                <p class="text-gray-600 leading-relaxed mb-6">${property.description}</p>
-                                <div class="text-4xl font-bold text-green-700 mb-8">${formattedPrice}</div>
-                                
-                                <div class="flex flex-wrap gap-4">
-                                    <a href="https://wa.me/2348160952082?text=I'm interested in the property: ${encodeURIComponent(property.title)} (ID: ${propertyId})" target="_blank" class="inline-block bg-green-600 text-white px-8 py-4 rounded-lg hover:bg-green-700 transition text-lg font-semibold">
-                                        <i class="fab fa-whatsapp mr-2"></i> Book Inspection
-                                    </a>
-                                    ${videoButtonHtml}
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    container.innerHTML = '<p class="text-center text-2xl text-red-500 font-semibold">Property not found.</p>';
-                    document.title = "Property Not Found | Naijaland";
-                }
+            if (slug) {
+                getPropertyBySlug(slug);
             } else {
-                container.innerHTML = '<p class="text-center text-2xl text-red-500 font-semibold">No property ID specified.</p>';
+                document.getElementById('property-detail-container').innerHTML = '<p class="text-center text-2xl text-red-500 font-semibold">No property specified.</p>';
                 document.title = "Invalid Property | Naijaland";
             }
         });
