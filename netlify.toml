@@ -1,2 +1,9 @@
 [build]
+  # This tells Netlify where your website's files are.
+  publish = "public"
+  # This tells Netlify where your serverless functions are.
+  functions = "netlify/functions"
+
+[dev]
+  # This specifically tells the "netlify dev" command which folder to serve.
   publish = "public"

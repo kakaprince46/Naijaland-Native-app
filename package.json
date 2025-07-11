@@ -13,6 +13,7 @@
     "@capacitor/android": "^7.3.0",
     "@capacitor/cli": "^7.3.0",
     "@capacitor/core": "^7.3.0",
-    "axios": "^1.10.0"
+    "axios": "^1.10.0",
+    "resend": "^4.6.0"
   }
 }

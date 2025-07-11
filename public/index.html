@@ -2345,7 +2345,7 @@
             }
         }
 
-        // [CORRECTED] Upload receipt to Firestore and create an investment
+       // [CORRECTED] Upload receipt to Firestore and create an investment
         async function uploadReceipt() {
             const propertyId = document.getElementById('receipt-property-select').value;
             const fileInput = document.getElementById('receipt-file');
@@ -2389,11 +2389,16 @@
                 const propertyRef = db.collection('properties').doc(propertyId);
                 const investmentRef = db.collection('investments').doc();
 
+                // MODIFICATION: Declare propertyData here with 'let'
+                let propertyData;
+
                 await db.runTransaction(async (transaction) => {
                     const propertyDoc = await transaction.get(propertyRef);
                     if (!propertyDoc.exists) throw new Error("Property does not exist.");
 
-                    const propertyData = propertyDoc.data();
+                    // MODIFICATION: Assign the value, don't re-declare with 'const'
+                    propertyData = propertyDoc.data();
+
                     if (propertyData.status !== 'available') throw new Error("This property is no longer available.");
 
                     transaction.update(propertyRef, {
@@ -2415,6 +2420,34 @@
                         createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     });
                 });
+
+                // ✅ EMAIL NOTIFICATION LOGIC STARTS HERE
+                try {
+                    await fetch('/.netlify/functions/send-notification', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            to: 'kakaprince46@gmail.com', // Your admin email address
+                            // This line will now work correctly
+                            subject: `New Receipt Upload for ${propertyData.title}`,
+                            html: `
+                            <h1>New Payment Receipt Uploaded</h1>
+                            <p>A new payment receipt has been submitted for verification.</p>
+                            <ul>
+                                <li><strong>User:</strong> ${user.email}</li>
+                                <li><strong>Property:</strong> ${propertyData.title}</li>
+                                <li><strong>Plots:</strong> ${plots}</li>
+                                <li><strong>Amount Paid:</strong> ₦${Number(amount).toLocaleString()}</li>
+                            </ul>
+                            <p>Please log in to your dashboard to review and verify this payment.</p>
+                        `,
+                        }),
+                    });
+                } catch (emailError) {
+                    console.error('Failed to send receipt notification email:', emailError);
+                    // Don't block the user flow, just log the error
+                }
+                // ✅ EMAIL NOTIFICATION LOGIC ENDS HERE
 
                 showReceiptMessage('Receipt submitted for verification!', 'success');
 
@@ -2737,32 +2770,56 @@
         }
 
         async function handleSuccessfulPayment(response, amount, plots, property) {
-            showToast(`Payment of ₦${parseInt(amount).toLocaleString()} completed for ${property.title}`, 'success');
-            showPaymentSuccess(property, amount);
+                showToast(`Payment of ₦${parseInt(amount).toLocaleString()} completed for ${property.title}`, 'success');
+                showPaymentSuccess(property, amount);
 
-            await addInvestmentWithTransaction(
-                auth.currentUser.uid,
-                property.id,
-                property.title,
-                parseInt(amount),
-                plots,
-                property.location,
-                response.reference
-            );
+                // EMAIL NOTIFICATION LOGIC
+                try {
+                    await fetch('/.netlify/functions/send-notification', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            to: 'smartprincenet@gmail.com', // Your admin email
+                            subject: `New Paystack Payment for ${property.title}`,
+                            html: `
+                    <h1>New Successful Paystack Payment</h1>
+                    <p>A new payment has been completed successfully.</p>
+                    <ul>
+                        <li><strong>User:</strong> ${auth.currentUser.email}</li>
+                        <li><strong>Property:</strong> ${property.title}</li>
+                        <li><strong>Plots:</strong> ${plots}</li>
+                        <li><strong>Amount Paid:</strong> ₦${parseInt(amount).toLocaleString()}</li>
+                        <li><strong>Paystack Reference:</strong> ${response.reference}</li>
+                    </ul>
+                `,
+                        }),
+                    });
+                } catch (emailError) { // The semicolon before this line is now gone.
+                    console.error('Failed to send payment notification email:', emailError);
+                }
 
-            const notification = document.createElement('div');
-            notification.className = 'fixed bottom-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center';
-            notification.innerHTML = `
-                <i class="fas fa-check-circle mr-2"></i>
-                <span>Your dashboard has been updated with your new investment</span>
-            `;
-            document.body.appendChild(notification);
+                await addInvestmentWithTransaction(
+                    auth.currentUser.uid,
+                    property.id,
+                    property.title,
+                    parseInt(amount),
+                    plots,
+                    property.location,
+                    response.reference
+                );
 
-            setTimeout(() => {
-                document.body.removeChild(notification);
-            }, 5000);
-        }
+                const notification = document.createElement('div');
+                notification.className = 'fixed bottom-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center';
+                notification.innerHTML = `
+        <i class="fas fa-check-circle mr-2"></i>
+        <span>Your dashboard has been updated with your new investment</span>
+    `;
+                document.body.appendChild(notification);
 
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 5000);
+            }
         // Process payment with Paystack
         async function processPayment() {
             const propertyId = document.getElementById('payment-property').value;
