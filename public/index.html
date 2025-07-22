@@ -3139,25 +3139,26 @@ const slug = createSlug(title, location);
 
     <script>
         window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            const deferredPrompt = e;
+                e.preventDefault();
+                const deferredPrompt = e;
 
-            const installButton = document.createElement('button');
-            installButton.textContent = 'Install App';
-            installButton.className = 'fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg z-50';
-            installButton.onclick = () => {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted install prompt');
-                    } else {
-                        console.log('User dismissed install prompt');
-                    }
-                    document.body.removeChild(installButton);
-                });
-            };
-            document.body.appendChild(installButton);
-        });
+                const installButton = document.createElement('button');
+                installButton.textContent = 'Install App';
+                // CHANGE: We've changed 'right-4' to 'left-4' to move the button
+                installButton.className = 'fixed bottom-4 left-4 bg-green-600 text-white px-4 py-2 rounded-lg z-50';
+                installButton.onclick = () => {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('User accepted install prompt');
+                        } else {
+                            console.log('User dismissed install prompt');
+                        }
+                        document.body.removeChild(installButton);
+                    });
+                };
+                document.body.appendChild(installButton);
+            });
     </script>
 
     <script>
