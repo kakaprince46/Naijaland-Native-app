@@ -1,9 +1,15 @@
 [build]
   # This tells Netlify where your website's files are.
-  publish = "public"
+  publish = "."
   # This tells Netlify where your serverless functions are.
   functions = "netlify/functions"
 
 [dev]
   # This specifically tells the "netlify dev" command which folder to serve.
-  publish = "public"
+  publish = "."
+
+# This is the section that fixes the 4xx error for property pages.
+[[rewrites]]
+  from = "/property/*"
+  to = "/property.html"
+  status = 200
