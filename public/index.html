@@ -1982,7 +1982,7 @@
                 // Filters
                 document.getElementById('apply-filters').addEventListener('click', applyFilters);
                 document.getElementById('search-properties').addEventListener('input', searchProperties);
-                document.getElementById('dashboard-filter-location').addEventListener('change', searchProperties); // ✅ Moved here
+                document.getElementById('dashboard-filter-location').addEventListener('change', searchProperties);
 
                 // Reload properties button
                 app.reloadPropertiesBtn.addEventListener('click', () => loadProperties());
@@ -2071,21 +2071,11 @@
                     });
                 });
 
-                // Delegated event listeners for dynamic content
+                // Delegated event listeners for dynamic content (like the .pay-button)
                 document.addEventListener('click', function (e) {
                     // View Details Button
                     if (e.target.classList.contains('view-details') || e.target.closest('.view-details')) {
-                        /*
-                        const user = auth.currentUser;
-                        if (!user) {
-                            showLoginModal();
-                            showAuthMessage("Please log in to view property details and make a secure payment.", "info");
-                        } else {
-                            const button = e.target.classList.contains('view-details') ? e.target : e.target.closest('.view-details');
-                            const propertyId = button.dataset.id;
-                            console.log("Viewing details for property:", propertyId);
-                        }
-                        */
+                        // Logic for this is currently commented out, which is fine
                     }
 
                     // Pay buttons
@@ -2100,8 +2090,7 @@
                         const button = e.target.classList.contains('sell-property') ? e.target : e.target.closest('.sell-property');
                         const investmentId = button.dataset.id;
                         document.getElementById('sell-property-select').value = investmentId;
-                        const confirmSell = confirm('Are you sure you want to list this property for sale? This will open the sale details form.');
-                        if (confirmSell) {
+                        if (confirm('Are you sure you want to list this property for sale? This will open the sale details form.')) {
                             app.sellPropertyModal.classList.remove('hidden');
                         }
                     }
