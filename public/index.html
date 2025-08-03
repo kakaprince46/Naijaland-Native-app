@@ -1910,249 +1910,211 @@
         }
 
         // Setup event listeners
-       function setupEventListeners() {
-            // Auth modal toggles
-            document.getElementById('show-register').addEventListener('click', showRegisterModal);
-            document.getElementById('show-login').addEventListener('click', showLoginModal);
-            document.getElementById('show-login-from-forgot').addEventListener('click', showLoginModal);
-            document.getElementById('show-forgot-password').addEventListener('click', showForgotPasswordModal);
-            document.getElementById('close-auth-modal').addEventListener('click', () => app.authModal.classList.add('hidden'));
+        function setupEventListeners() {
+                // Auth modal toggles
+                document.getElementById('show-register').addEventListener('click', showRegisterModal);
+                document.getElementById('show-login').addEventListener('click', showLoginModal);
+                document.getElementById('show-login-from-forgot').addEventListener('click', showLoginModal);
+                document.getElementById('show-forgot-password').addEventListener('click', showForgotPasswordModal);
+                document.getElementById('close-auth-modal').addEventListener('click', () => app.authModal.classList.add('hidden'));
 
-            // Auth form submissions
-            document.getElementById('login-submit').addEventListener('click', loginUser);
-            document.getElementById('register-submit').addEventListener('click', registerUser);
-            document.getElementById('forgot-submit').addEventListener('click', sendPasswordReset);
+                // Auth form submissions
+                document.getElementById('login-submit').addEventListener('click', loginUser);
+                document.getElementById('register-submit').addEventListener('click', registerUser);
+                document.getElementById('forgot-submit').addEventListener('click', sendPasswordReset);
 
-            // Edit profile
-            document.getElementById('edit-profile').addEventListener('click', showEditProfileModal);
-            document.getElementById('close-edit-modal').addEventListener('click', () => app.editProfileModal.classList.add('hidden'));
-            document.getElementById('save-profile').addEventListener('click', saveProfile);
+                // Edit profile
+                document.getElementById('edit-profile').addEventListener('click', showEditProfileModal);
+                document.getElementById('close-edit-modal').addEventListener('click', () => app.editProfileModal.classList.add('hidden'));
+                document.getElementById('save-profile').addEventListener('click', saveProfile);
 
-            // Payment
-            document.getElementById('paystack-button').addEventListener('click', () => app.paymentModal.classList.remove('hidden'));
-            document.getElementById('close-payment-modal').addEventListener('click', () => app.paymentModal.classList.add('hidden'));
-            document.getElementById('initiate-payment').addEventListener('click', processPayment);
+                // Payment
+                document.getElementById('paystack-button').addEventListener('click', () => app.paymentModal.classList.remove('hidden'));
+                document.getElementById('close-payment-modal').addEventListener('click', () => app.paymentModal.classList.add('hidden'));
+                document.getElementById('initiate-payment').addEventListener('click', processPayment);
 
-            // Sell property
-            document.getElementById('close-sell-modal').addEventListener('click', () => app.sellPropertyModal.classList.add('hidden'));
-            document.getElementById('submit-sale').addEventListener('click', listPropertyForSale);
+                // Sell property
+                document.getElementById('close-sell-modal').addEventListener('click', () => app.sellPropertyModal.classList.add('hidden'));
+                document.getElementById('submit-sale').addEventListener('click', listPropertyForSale);
 
-            // DOWN - Add event listeners for the new payment choice modal
-            document.getElementById('close-payment-choice-modal').addEventListener('click', () => app.paymentChoiceModal.classList.add('hidden'));
-            document.getElementById('choice-paystack-btn').addEventListener('click', (e) => {
-                const propertyId = e.currentTarget.dataset.propertyId;
-                app.paymentChoiceModal.classList.add('hidden'); // Hide the choice modal
+                // Payment choice modal
+                document.getElementById('close-payment-choice-modal').addEventListener('click', () => app.paymentChoiceModal.classList.add('hidden'));
+                document.getElementById('choice-paystack-btn').addEventListener('click', (e) => {
+                    const propertyId = e.currentTarget.dataset.propertyId;
+                    app.paymentChoiceModal.classList.add('hidden');
 
-                // Now, trigger the original Paystack payment modal
-                getProperty(propertyId).then(property => {
-                    if (property) {
-                        document.getElementById('payment-property').value = property.id;
-                        document.getElementById('payment-price-per-plot').value = property.price;
-                        document.getElementById('payment-plots').value = '1'; // Default to 1 plot
-                        calculatePaymentAmount(); // Calculate the total amount
-                        document.getElementById('payment-email').value = auth.currentUser?.email || '';
-                        app.paymentModal.classList.remove('hidden'); // Show the Paystack modal
+                    getProperty(propertyId).then(property => {
+                        if (property) {
+                            document.getElementById('payment-property').value = property.id;
+                            document.getElementById('payment-price-per-plot').value = property.price;
+                            document.getElementById('payment-plots').value = '1';
+                            calculatePaymentAmount();
+                            document.getElementById('payment-email').value = auth.currentUser?.email || '';
+                            app.paymentModal.classList.remove('hidden');
+                        }
+                    });
+                });
+
+                document.getElementById('choice-transfer-btn').addEventListener('click', (e) => {
+                    const propertyId = e.currentTarget.dataset.propertyId;
+                    app.paymentChoiceModal.classList.add('hidden');
+                    showReceiptModal();
+                    setTimeout(() => {
+                        const receiptPropertySelect = document.getElementById('receipt-property-select');
+                        if (receiptPropertySelect) {
+                            receiptPropertySelect.value = propertyId;
+                            const event = new Event('change');
+                            receiptPropertySelect.dispatchEvent(event);
+                        }
+                    }, 500);
+                });
+
+                // Admin controls
+                document.getElementById('update-investments').addEventListener('click', updateAllInvestments);
+                document.getElementById('add-property').addEventListener('click', () => app.addPropertyModal.classList.remove('hidden'));
+                document.getElementById('close-add-property-modal').addEventListener('click', () => app.addPropertyModal.classList.add('hidden'));
+                document.getElementById('submit-property').addEventListener('click', addNewProperty);
+
+                // Calculator
+                document.getElementById('calculate-price').addEventListener('click', calculateTotalPrice);
+                document.getElementById('proceed-to-payment').addEventListener('click', proceedToPaymentFromCalculator);
+
+                // Filters
+                document.getElementById('apply-filters').addEventListener('click', applyFilters);
+                document.getElementById('search-properties').addEventListener('input', searchProperties);
+                document.getElementById('dashboard-filter-location').addEventListener('change', searchProperties); // ✅ Moved here
+
+                // Reload properties button
+                app.reloadPropertiesBtn.addEventListener('click', () => loadProperties());
+
+                // Pagination
+                document.getElementById('prev-page').addEventListener('click', () => {
+                    if (pagination.currentPage > 1) {
+                        pagination.currentPage--;
+                        loadProperties();
                     }
                 });
-            });
-            document.getElementById('choice-transfer-btn').addEventListener('click', (e) => {
-                const propertyId = e.currentTarget.dataset.propertyId;
-                app.paymentChoiceModal.classList.add('hidden'); // Hide the choice modal
 
-                // Now, trigger the existing "Upload Receipt" modal
-                showReceiptModal();
-
-                // Pre-select the property in the receipt modal
-                // We need a slight delay for the property list to populate in showReceiptModal
-                setTimeout(() => {
-                    const receiptPropertySelect = document.getElementById('receipt-property-select');
-                    if (receiptPropertySelect) {
-                        receiptPropertySelect.value = propertyId;
-                        // Manually trigger the 'onchange' event to update the price fields
-                        const event = new Event('change');
-                        receiptPropertySelect.dispatchEvent(event);
-                    }
-                }, 500); // 500ms should be enough for properties to load
-            });
-            // UP
-
-            // Admin controls
-            document.getElementById('update-investments').addEventListener('click', updateAllInvestments);
-            document.getElementById('add-property').addEventListener('click', () => app.addPropertyModal.classList.remove('hidden'));
-            document.getElementById('close-add-property-modal').addEventListener('click', () => app.addPropertyModal.classList.add('hidden'));
-            document.getElementById('submit-property').addEventListener('click', addNewProperty);
-
-            // Calculator
-            document.getElementById('calculate-price').addEventListener('click', calculateTotalPrice);
-            document.getElementById('proceed-to-payment').addEventListener('click', proceedToPaymentFromCalculator);
-
-            // Filters
-            document.getElementById('apply-filters').addEventListener('click', applyFilters);
-            document.getElementById('search-properties').addEventListener('input', searchProperties);
-            // NEW: Event listener for the dashboard location filter is now in its correct place
-            document.getElementById('dashboard-filter-location').addEventListener('change', searchProperties);
-
-
-            // Reload properties button
-            app.reloadPropertiesBtn.addEventListener('click', () => loadProperties());
-
-            // Pagination
-            document.getElementById('prev-page').addEventListener('click', () => {
-                if (pagination.currentPage > 1) {
-                    pagination.currentPage--;
-                    loadProperties();
-                }
-            });
-
-            document.getElementById('next-page').addEventListener('click', () => {
-                if (pagination.currentPage < pagination.totalPages) {
-                    pagination.currentPage++;
-                    loadProperties();
-                }
-            });
-
-            document.getElementById('dashboard-prev-page').addEventListener('click', () => {
-                if (pagination.currentPage > 1) {
-                    pagination.currentPage--;
-                    loadProperties(true);
-                }
-            });
-
-            document.getElementById('dashboard-next-page').addEventListener('click', () => {
-                if (pagination.currentPage < pagination.totalPages) {
-                    pagination.currentPage++;
-                    loadProperties(true);
-                }
-            });
-
-            // Terms and conditions
-            document.getElementById('view-terms').addEventListener('click', () => app.termsModal.classList.remove('hidden'));
-            document.getElementById('close-terms-modal').addEventListener('click', () => app.termsModal.classList.add('hidden'));
-            document.getElementById('accept-terms').addEventListener('click', () => {
-                document.getElementById('accept-terms-checkbox').checked = true;
-                app.termsModal.classList.add('hidden');
-                showToast('Terms & Conditions accepted', 'success');
-            });
-
-            // Receipt upload
-            document.getElementById('upload-receipt').addEventListener('click', showReceiptModal);
-            document.getElementById('close-receipt-modal').addEventListener('click', () => app.receiptModal.classList.add('hidden'));
-            document.getElementById('choose-receipt').addEventListener('click', () => document.getElementById('receipt-file').click());
-            document.getElementById('receipt-file').addEventListener('change', handleReceiptFileSelect);
-            document.getElementById('submit-receipt').addEventListener('click', uploadReceipt);
-        }
-
-            // ================================================================
-            // START: THIS IS THE JAVASCRIPT CODE THAT WAS ADDED
-            // It makes the copy icons interactive.
-            // ================================================================
-
-            // Copy Bank Account Name
-            document.getElementById('copy-account-name-btn').addEventListener('click', () => {
-                // Get the text from the span with the ID 'bank-account-name'
-                const textToCopy = document.getElementById('bank-account-name').textContent;
-
-                // Use the browser's Clipboard API to copy the text
-                navigator.clipboard.writeText(textToCopy).then(() => {
-                    // If successful, show a confirmation message using the existing showToast function
-                    showToast('Account Name copied!', 'success');
-                }).catch(err => {
-                    // If it fails, log the error and show an error message
-                    console.error('Failed to copy text: ', err);
-                    showToast('Failed to copy', 'error');
-                });
-            });
-
-            // Copy Bank Account Number
-            document.getElementById('copy-account-number-btn').addEventListener('click', () => {
-                // Get the text from the span with the ID 'bank-account-number'
-                const textToCopy = document.getElementById('bank-account-number').textContent;
-
-                // Use the browser's Clipboard API to copy the text
-                navigator.clipboard.writeText(textToCopy).then(() => {
-                    // If successful, show a confirmation message
-                    showToast('Account Number copied!', 'success');
-                }).catch(err => {
-                    // If it fails, log the error and show an error message
-                    console.error('Failed to copy text: ', err);
-                    showToast('Failed to copy', 'error');
-                });
-            });
-
-            // ================================================================
-            // END OF THE ADDED JAVASCRIPT CODE
-            // ================================================================
-
-            // =========== NEW SUBSCRIPTION EVENT LISTENER START ===========
-            document.getElementById('subscribe-btn').addEventListener('click', handleSubscription);
-            // =========== NEW SUBSCRIPTION EVENT LISTENER END ===========
-
-            // Password toggle
-            document.querySelectorAll('.password-toggle').forEach(button => {
-                button.addEventListener('click', function () {
-                    const targetId = this.getAttribute('data-target');
-                    const input = document.getElementById(targetId);
-                    if (input.type === 'password') {
-                        input.type = 'text';
-                        this.innerHTML = '<i class="fas fa-eye-slash"></i>';
-                    } else {
-                        input.type = 'password';
-                        this.innerHTML = '<i class="fas fa-eye"></i>';
+                document.getElementById('next-page').addEventListener('click', () => {
+                    if (pagination.currentPage < pagination.totalPages) {
+                        pagination.currentPage++;
+                        loadProperties();
                     }
                 });
-            });
 
-            // Delegated event listeners for dynamic content
-            document.addEventListener('click', function (e) {
-                // View Details Button
-                if (e.target.classList.contains('view-details') || e.target.closest('.view-details')) {
+                document.getElementById('dashboard-prev-page').addEventListener('click', () => {
+                    if (pagination.currentPage > 1) {
+                        pagination.currentPage--;
+                        loadProperties(true);
+                    }
+                });
 
-                    /* <-- ADD THIS LINE to start the comment
-                    const user = auth.currentUser;
-                    if (!user) {
-                        showLoginModal();
-                        showAuthMessage("Please log in to view property details and make a secure payment.", "info");
-                    } else {
-                        // Existing functionality for logged-in users
-                        const button = e.target.classList.contains('view-details') ? e.target : e.target.closest('.view-details');
+                document.getElementById('dashboard-next-page').addEventListener('click', () => {
+                    if (pagination.currentPage < pagination.totalPages) {
+                        pagination.currentPage++;
+                        loadProperties(true);
+                    }
+                });
+
+                // Terms and conditions
+                document.getElementById('view-terms').addEventListener('click', () => app.termsModal.classList.remove('hidden'));
+                document.getElementById('close-terms-modal').addEventListener('click', () => app.termsModal.classList.add('hidden'));
+                document.getElementById('accept-terms').addEventListener('click', () => {
+                    document.getElementById('accept-terms-checkbox').checked = true;
+                    app.termsModal.classList.add('hidden');
+                    showToast('Terms & Conditions accepted', 'success');
+                });
+
+                // Receipt upload
+                document.getElementById('upload-receipt').addEventListener('click', showReceiptModal);
+                document.getElementById('close-receipt-modal').addEventListener('click', () => app.receiptModal.classList.add('hidden'));
+                document.getElementById('choose-receipt').addEventListener('click', () => document.getElementById('receipt-file').click());
+                document.getElementById('receipt-file').addEventListener('change', handleReceiptFileSelect);
+                document.getElementById('submit-receipt').addEventListener('click', uploadReceipt);
+
+                // Copy buttons
+                document.getElementById('copy-account-name-btn').addEventListener('click', () => {
+                    const textToCopy = document.getElementById('bank-account-name').textContent;
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        showToast('Account Name copied!', 'success');
+                    }).catch(err => {
+                        console.error('Failed to copy text: ', err);
+                        showToast('Failed to copy', 'error');
+                    });
+                });
+
+                document.getElementById('copy-account-number-btn').addEventListener('click', () => {
+                    const textToCopy = document.getElementById('bank-account-number').textContent;
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        showToast('Account Number copied!', 'success');
+                    }).catch(err => {
+                        console.error('Failed to copy text: ', err);
+                        showToast('Failed to copy', 'error');
+                    });
+                });
+
+                // Subscription
+                document.getElementById('subscribe-btn').addEventListener('click', handleSubscription);
+
+                // Password toggle
+                document.querySelectorAll('.password-toggle').forEach(button => {
+                    button.addEventListener('click', function () {
+                        const targetId = this.getAttribute('data-target');
+                        const input = document.getElementById(targetId);
+                        if (input.type === 'password') {
+                            input.type = 'text';
+                            this.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                        } else {
+                            input.type = 'password';
+                            this.innerHTML = '<i class="fas fa-eye"></i>';
+                        }
+                    });
+                });
+
+                // Delegated event listeners for dynamic content
+                document.addEventListener('click', function (e) {
+                    // View Details Button
+                    if (e.target.classList.contains('view-details') || e.target.closest('.view-details')) {
+                        /*
+                        const user = auth.currentUser;
+                        if (!user) {
+                            showLoginModal();
+                            showAuthMessage("Please log in to view property details and make a secure payment.", "info");
+                        } else {
+                            const button = e.target.classList.contains('view-details') ? e.target : e.target.closest('.view-details');
+                            const propertyId = button.dataset.id;
+                            console.log("Viewing details for property:", propertyId);
+                        }
+                        */
+                    }
+
+                    // Pay buttons
+                    if (e.target.classList.contains('pay-button') || e.target.closest('.pay-button')) {
+                        const button = e.target.classList.contains('pay-button') ? e.target : e.target.closest('.pay-button');
                         const propertyId = button.dataset.id;
-                        // Implement what should happen when a logged-in user clicks "View Details"
-                        // For example, show a modal with more details.
-                        console.log("Viewing details for property:", propertyId);
+                        showPaymentChoiceModal(propertyId);
                     }
-                    */  // <-- ADD THIS LINE to end the comment
-                }
 
-                // Pay buttons
-                if (e.target.classList.contains('pay-button') || e.target.closest('.pay-button')) {
-                    // DOWN - New logic to show payment choice
-                    const button = e.target.classList.contains('pay-button') ? e.target : e.target.closest('.pay-button');
-                    const propertyId = button.dataset.id;
-                    showPaymentChoiceModal(propertyId);
-                    // UP
-                }
-
-                // Sell property buttons from investment list
-                if (e.target.classList.contains('sell-property') || e.target.closest('.sell-property')) {
-                    const button = e.target.classList.contains('sell-property') ? e.target : e.target.closest('.sell-property');
-                    const investmentId = button.dataset.id;
-
-                    document.getElementById('sell-property-select').value = investmentId;
-
-                    const confirmSell = confirm('Are you sure you want to list this property for sale? This will open the sale details form.');
-                    if (confirmSell) {
-                        app.sellPropertyModal.classList.remove('hidden');
+                    // Sell property buttons from investment list
+                    if (e.target.classList.contains('sell-property') || e.target.closest('.sell-property')) {
+                        const button = e.target.classList.contains('sell-property') ? e.target : e.target.closest('.sell-property');
+                        const investmentId = button.dataset.id;
+                        document.getElementById('sell-property-select').value = investmentId;
+                        const confirmSell = confirm('Are you sure you want to list this property for sale? This will open the sale details form.');
+                        if (confirmSell) {
+                            app.sellPropertyModal.classList.remove('hidden');
+                        }
                     }
-                }
 
-                // View receipt buttons
-                if (e.target.classList.contains('view-receipt') || e.target.closest('.view-receipt')) {
-                    const button = e.target.classList.contains('view-receipt') ? e.target : e.target.closest('.view-receipt');
-                    const investmentId = button.dataset.id;
-                    viewReceipt(investmentId);
-                }
-            });
-        }
+                    // View receipt buttons
+                    if (e.target.classList.contains('view-receipt') || e.target.closest('.view-receipt')) {
+                        const button = e.target.classList.contains('view-receipt') ? e.target : e.target.closest('.view-receipt');
+                        const investmentId = button.dataset.id;
+                        viewReceipt(investmentId);
+                    }
+                });
+            }
+
 
         // =========== NEW SUBSCRIPTION HANDLER FUNCTION START ===========
             async function handleSubscription() {
