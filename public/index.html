@@ -1937,44 +1937,35 @@
                 document.getElementById('close-sell-modal').addEventListener('click', () => app.sellPropertyModal.classList.add('hidden'));
                 document.getElementById('submit-sale').addEventListener('click', listPropertyForSale);
 
-                // DOWN - Add event listeners for the new payment choice modal
+                // Payment choice modal
                 document.getElementById('close-payment-choice-modal').addEventListener('click', () => app.paymentChoiceModal.classList.add('hidden'));
                 document.getElementById('choice-paystack-btn').addEventListener('click', (e) => {
                     const propertyId = e.currentTarget.dataset.propertyId;
-                    app.paymentChoiceModal.classList.add('hidden'); // Hide the choice modal
-
-                    // Now, trigger the original Paystack payment modal
+                    app.paymentChoiceModal.classList.add('hidden');
                     getProperty(propertyId).then(property => {
                         if (property) {
                             document.getElementById('payment-property').value = property.id;
                             document.getElementById('payment-price-per-plot').value = property.price;
-                            document.getElementById('payment-plots').value = '1'; // Default to 1 plot
-                            calculatePaymentAmount(); // Calculate the total amount
+                            document.getElementById('payment-plots').value = '1';
+                            calculatePaymentAmount();
                             document.getElementById('payment-email').value = auth.currentUser?.email || '';
-                            app.paymentModal.classList.remove('hidden'); // Show the Paystack modal
+                            app.paymentModal.classList.remove('hidden');
                         }
                     });
                 });
                 document.getElementById('choice-transfer-btn').addEventListener('click', (e) => {
                     const propertyId = e.currentTarget.dataset.propertyId;
-                    app.paymentChoiceModal.classList.add('hidden'); // Hide the choice modal
-
-                    // Now, trigger the existing "Upload Receipt" modal
+                    app.paymentChoiceModal.classList.add('hidden');
                     showReceiptModal();
-
-                    // Pre-select the property in the receipt modal
-                    // We need a slight delay for the property list to populate in showReceiptModal
                     setTimeout(() => {
                         const receiptPropertySelect = document.getElementById('receipt-property-select');
                         if (receiptPropertySelect) {
                             receiptPropertySelect.value = propertyId;
-                            // Manually trigger the 'onchange' event to update the price fields
                             const event = new Event('change');
                             receiptPropertySelect.dispatchEvent(event);
                         }
-                    }, 500); // 500ms should be enough for properties to load
+                    }, 500);
                 });
-                // UP
 
                 // Admin controls
                 document.getElementById('update-investments').addEventListener('click', updateAllInvestments);
@@ -1996,31 +1987,16 @@
 
                 // Pagination
                 document.getElementById('prev-page').addEventListener('click', () => {
-                    if (pagination.currentPage > 1) {
-                        pagination.currentPage--;
-                        loadProperties();
-                    }
+                    if (pagination.currentPage > 1) { pagination.currentPage--; loadProperties(); }
                 });
-
                 document.getElementById('next-page').addEventListener('click', () => {
-                    if (pagination.currentPage < pagination.totalPages) {
-                        pagination.currentPage++;
-                        loadProperties();
-                    }
+                    if (pagination.currentPage < pagination.totalPages) { pagination.currentPage++; loadProperties(); }
                 });
-
                 document.getElementById('dashboard-prev-page').addEventListener('click', () => {
-                    if (pagination.currentPage > 1) {
-                        pagination.currentPage--;
-                        loadProperties(true);
-                    }
+                    if (pagination.currentPage > 1) { pagination.currentPage--; loadProperties(true); }
                 });
-
                 document.getElementById('dashboard-next-page').addEventListener('click', () => {
-                    if (pagination.currentPage < pagination.totalPages) {
-                        pagination.currentPage++;
-                        loadProperties(true);
-                    }
+                    if (pagination.currentPage < pagination.totalPages) { pagination.currentPage++; loadProperties(true); }
                 });
 
                 // Terms and conditions
@@ -2039,50 +2015,18 @@
                 document.getElementById('receipt-file').addEventListener('change', handleReceiptFileSelect);
                 document.getElementById('submit-receipt').addEventListener('click', uploadReceipt);
 
-                // ================================================================
-                // START: THIS IS THE JAVASCRIPT CODE THAT WAS ADDED
-                // It makes the copy icons interactive.
-                // ================================================================
-
-                // Copy Bank Account Name
+                // Copy buttons
                 document.getElementById('copy-account-name-btn').addEventListener('click', () => {
-                    // Get the text from the span with the ID 'bank-account-name'
                     const textToCopy = document.getElementById('bank-account-name').textContent;
-
-                    // Use the browser's Clipboard API to copy the text
-                    navigator.clipboard.writeText(textToCopy).then(() => {
-                        // If successful, show a confirmation message using the existing showToast function
-                        showToast('Account Name copied!', 'success');
-                    }).catch(err => {
-                        // If it fails, log the error and show an error message
-                        console.error('Failed to copy text: ', err);
-                        showToast('Failed to copy', 'error');
-                    });
+                    navigator.clipboard.writeText(textToCopy).then(() => showToast('Account Name copied!', 'success')).catch(err => showToast('Failed to copy', 'error'));
                 });
-
-                // Copy Bank Account Number
                 document.getElementById('copy-account-number-btn').addEventListener('click', () => {
-                    // Get the text from the span with the ID 'bank-account-number'
                     const textToCopy = document.getElementById('bank-account-number').textContent;
-
-                    // Use the browser's Clipboard API to copy the text
-                    navigator.clipboard.writeText(textToCopy).then(() => {
-                        // If successful, show a confirmation message
-                        showToast('Account Number copied!', 'success');
-                    }).catch(err => {
-                        // If it fails, log the error and show an error message
-                        console.error('Failed to copy text: ', err);
-                        showToast('Failed to copy', 'error');
-                    });
+                    navigator.clipboard.writeText(textToCopy).then(() => showToast('Account Number copied!', 'success')).catch(err => showToast('Failed to copy', 'error'));
                 });
 
-                // ================================================================
-                // END OF THE ADDED JAVASCRIPT CODE
-                // ================================================================
-
-                // =========== NEW SUBSCRIPTION EVENT LISTENER START ===========
+                // Subscription
                 document.getElementById('subscribe-btn').addEventListener('click', handleSubscription);
-                // =========== NEW SUBSCRIPTION EVENT LISTENER END ===========
 
                 // Password toggle
                 document.querySelectorAll('.password-toggle').forEach(button => {
@@ -2103,41 +2047,22 @@
                 document.addEventListener('click', function (e) {
                     // View Details Button
                     if (e.target.classList.contains('view-details') || e.target.closest('.view-details')) {
-
-                        /* <-- ADD THIS LINE to start the comment
-                        const user = auth.currentUser;
-                        if (!user) {
-                            showLoginModal();
-                            showAuthMessage("Please log in to view property details and make a secure payment.", "info");
-                        } else {
-                            // Existing functionality for logged-in users
-                            const button = e.target.classList.contains('view-details') ? e.target : e.target.closest('.view-details');
-                            const propertyId = button.dataset.id;
-                            // Implement what should happen when a logged-in user clicks "View Details"
-                            // For example, show a modal with more details.
-                            console.log("Viewing details for property:", propertyId);
-                        }
-                        */  // <-- ADD THIS LINE to end the comment
+                        // Logic is commented out
                     }
 
                     // Pay buttons
                     if (e.target.classList.contains('pay-button') || e.target.closest('.pay-button')) {
-                        // DOWN - New logic to show payment choice
                         const button = e.target.classList.contains('pay-button') ? e.target : e.target.closest('.pay-button');
                         const propertyId = button.dataset.id;
                         showPaymentChoiceModal(propertyId);
-                        // UP
                     }
 
-                    // Sell property buttons from investment list
+                    // Sell property buttons
                     if (e.target.classList.contains('sell-property') || e.target.closest('.sell-property')) {
                         const button = e.target.classList.contains('sell-property') ? e.target : e.target.closest('.sell-property');
                         const investmentId = button.dataset.id;
-
                         document.getElementById('sell-property-select').value = investmentId;
-
-                        const confirmSell = confirm('Are you sure you want to list this property for sale? This will open the sale details form.');
-                        if (confirmSell) {
+                        if (confirm('Are you sure you want to list this property for sale? This will open the sale details form.')) {
                             app.sellPropertyModal.classList.remove('hidden');
                         }
                     }
