@@ -70,17 +70,19 @@
         }
 
         /* =========== ANNOUNCEMENT BAR CSS START =========== */
-    #announcement-bar {
-        position: sticky;
-        top: 0;
-        z-index: 1000; /* Ensures it stays on top of other content */
-        transition: transform 0.3s ease-in-out;
-    }
+        #announcement-bar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            /* Ensures it stays on top of other content */
+            transition: transform 0.3s ease-in-out;
+        }
 
-    #announcement-bar.hidden {
-        transform: translateY(-100%);
-    }
-    /* =========== ANNOUNCEMENT BAR CSS END =========== */
+        #announcement-bar.hidden {
+            transform: translateY(-100%);
+        }
+
+        /* =========== ANNOUNCEMENT BAR CSS END =========== */
 
         .auth-form {
             animation: fadeIn 0.3s ease-in-out;
@@ -129,22 +131,23 @@
         }
 
         @keyframes shimmer {
-    0% {
-        background-position: -200% 0;
-    }
+            0% {
+                background-position: -200% 0;
+            }
 
-    100% {
-        background-position: 200% 0;
-    }
-} /* <-- The animation block ends here */
+            100% {
+                background-position: 200% 0;
+            }
+        }
 
-/* Move the rule to here, outside the block */
-#receipt-preview-image {
-    max-height: 200px;
-    width: auto;
-    margin: 0 auto;
-}
-    
+        /* <-- The animation block ends here */
+
+        /* Move the rule to here, outside the block */
+        #receipt-preview-image {
+            max-height: 200px;
+            width: auto;
+            margin: 0 auto;
+        }
     </style>
 </head>
 
@@ -283,26 +286,30 @@
                         </section>
 
                         <section class="mb-8">
-                            <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
+                            <div class="flex justify-between items-center mb-4">
                                 <h2 class="text-2xl font-bold text-green-800">Available Properties</h2>
-                                <div class="flex flex-col md:flex-row items-center gap-4">
-                                    <div class="relative">
-                                        <select id="dashboard-filter-location" class="p-2 border rounded-lg w-full md:w-48">
-                                            <option value="">All Locations</option>
-                                        </select>
-                                    </div>
-                                    <div class="relative">
-                                        <input type="text" id="search-properties" placeholder="Search properties..."
-                                            class="pl-10 pr-4 py-2 border rounded-lg w-full md:w-64">
-                                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-                                    </div>
+                                <div class="relative">
+                                    <input type="text" id="search-properties" placeholder="Search properties..."
+                                        class="pl-10 pr-4 py-2 border rounded-lg w-full md:w-64">
+                                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                                 </div>
                             </div>
-                        
+
                             <div id="dashboard-property-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             </div>
-                        
-                            ...
+
+                            <div id="dashboard-pagination" class="flex justify-center mt-8 hidden">
+                                <button id="dashboard-prev-page"
+                                    class="px-4 py-2 bg-gray-200 rounded-l-md mr-1 disabled:opacity-50" disabled>
+                                    <i class="fas fa-chevron-left"></i> Previous
+                                </button>
+                                <div id="dashboard-page-numbers" class="flex">
+                                </div>
+                                <button id="dashboard-next-page"
+                                    class="px-4 py-2 bg-gray-200 rounded-r-md ml-1 disabled:opacity-50">
+                                    Next <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
                         </section>
 
                         <section class="bg-white p-6 rounded-lg shadow-md mb-8">
@@ -414,12 +421,16 @@
                     <div>
                         <h3 class="text-xl font-bold mb-4">Quick Links</h3>
                         <ul class="space-y-2">
-                            <li><a href="https://www.naijaland.site/faq/" class="hover:text-green-400 transition">FAQ</a></li>
-                            <li><a href="https://www.naijaland.site" class="hover:text-green-400 transition">Properties</a></li>
-                            <li><a href="https://www.naijaland.site/about/" class="hover:text-green-400 transition">About Us</a>
+                            <li><a href="https://www.naijaland.site/faq/"
+                                    class="hover:text-green-400 transition">FAQ</a></li>
+                            <li><a href="https://www.naijaland.site"
+                                    class="hover:text-green-400 transition">Properties</a></li>
+                            <li><a href="https://www.naijaland.site/about/"
+                                    class="hover:text-green-400 transition">About Us</a>
                             </li>
                             <li>
-                                <a href="https://wa.me/2348160952082" target="_blank" class="hover:text-green-400 transition">
+                                <a href="https://wa.me/2348160952082" target="_blank"
+                                    class="hover:text-green-400 transition">
                                     Message Us on WhatsApp
                                 </a>
                             </li>
@@ -435,7 +446,7 @@
                                 </a>
                             </li>
                         </ul>
-                        </div>
+                    </div>
                     <div>
                         <h3 class="text-xl font-bold mb-4">Legal</h3>
                         <ul class="space-y-2">
@@ -445,8 +456,8 @@
                             <li><a href="https://www.naijaland.site/conditions/"
                                     class="hover:text-green-400 transition">Privacy
                                     Policy</a></li>
-                            <li><a href="https://www.naijaland.site/ai/"
-                                    class="hover:text-green-400 transition">Ai Price
+                            <li><a href="https://www.naijaland.site/ai/" class="hover:text-green-400 transition">Ai
+                                    Price
                                     Estimator</a></li>
                         </ul>
                     </div>
@@ -457,16 +468,17 @@
                         <div class="flex">
                             <input type="email" id="subscribe-email" placeholder="Your email address"
                                 class="w-full p-2 rounded-l-lg text-gray-800 focus:outline-none">
-                            <button id="subscribe-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-r-lg transition">
+                            <button id="subscribe-btn"
+                                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-r-lg transition">
                                 Subscribe
                             </button>
                         </div>
                         <div id="subscribe-message" class="mt-2 text-sm"></div>
                     </div>
-                    </div>
-                    <div class="border-t border-gray-700 mt-8 pt-6 text-center">
-                        <p>&copy; 2025 Prince Kaka Global Resources. All rights reserved.</p>
-                    </div>
+                </div>
+                <div class="border-t border-gray-700 mt-8 pt-6 text-center">
+                    <p>&copy; 2025 Prince Kaka Global Resources. All rights reserved.</p>
+                </div>
             </div>
         </footer>
     </div>
@@ -786,7 +798,7 @@
                 <div class="mb-6">
                     <label class="block text-gray-700 mb-2">Facebook Video Link (Optional)</label>
                     <input type="url" id="property-video-link" class="w-full p-3 border rounded-lg"
-                        placeholder="e.g., https://www.facebook.com/watch/?v=12345">         
+                        placeholder="e.g., https://www.facebook.com/watch/?v=12345">
                 </div>
 
                 <button id="submit-property"
@@ -801,16 +813,16 @@
 
     <div id="receipt-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-lg shadow-xl w-full max-w-md auth-form flex flex-col max-h-[90vh]">
-    
+
             <div class="flex justify-between items-center p-6 border-b">
                 <h2 class="text-2xl font-bold text-green-800">Upload Payment Receipt</h2>
                 <button id="close-receipt-modal" class="text-gray-500 hover:text-gray-700">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-    
+
             <div class="p-6 overflow-y-auto">
-    
+
                 <div class="mb-6 p-4 bg-gray-100 rounded-lg border border-gray-200">
                     <h3 class="text-lg font-semibold text-gray-800 mb-3">Pay via Bank Transfer:</h3>
                     <div class="space-y-2 text-sm">
@@ -838,22 +850,23 @@
                             </div>
                         </div>
                     </div>
-                    <p class="text-xs text-center text-red-600 mt-4">After payment, please fill the form below and upload
+                    <p class="text-xs text-center text-red-600 mt-4">After payment, please fill the form below and
+                        upload
                         your receipt.</p>
                 </div>
-    
+
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2">Select Property</label>
                     <select id="receipt-property-select" class="w-full p-3 border rounded-lg">
                         <option value="">-- Select Available Property --</option>
                     </select>
                 </div>
-    
+
                 <div class="grid grid-cols-2 gap-4 mb-4">
                     <div>
                         <label class="block text-gray-700 mb-2">Price per Plot (₦)</label>
-                        <input type="number" id="receipt-price-per-plot" class="w-full p-3 border rounded-lg bg-gray-100"
-                            readonly>
+                        <input type="number" id="receipt-price-per-plot"
+                            class="w-full p-3 border rounded-lg bg-gray-100" readonly>
                     </div>
                     <div>
                         <label class="block text-gray-700 mb-2">Number of Plots</label>
@@ -861,7 +874,7 @@
                             placeholder="Enter plots" min="1">
                     </div>
                 </div>
-    
+
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2">Upload Receipt</label>
                     <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
@@ -876,7 +889,7 @@
                         <p class="text-sm text-gray-500 mt-2">PNG, JPG, or PDF (Max 5MB)</p>
                     </div>
                 </div>
-    
+
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2">Actual Amount Paid (₦)</label>
                     <input type="number" id="receipt-amount" class="w-full p-3 border rounded-lg"
@@ -886,9 +899,9 @@
                     <label class="block text-gray-700 mb-2">Payment Date</label>
                     <input type="date" id="receipt-date" class="w-full p-3 border rounded-lg">
                 </div>
-    
+
             </div>
-    
+
             <div class="p-6 border-t mt-auto bg-white">
                 <button id="submit-receipt"
                     class="w-full bg-green-700 text-white py-3 rounded-lg hover:bg-green-800 transition flex items-center justify-center">
@@ -896,9 +909,9 @@
                 </button>
                 <div id="receipt-message" class="hidden mt-4 p-3 rounded-lg text-center"></div>
             </div>
-    
+
         </div>
-        </div>
+    </div>
 
     <div id="terms-modal"
         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden overflow-y-auto">
@@ -1198,16 +1211,16 @@
         };
 
         // 👇 PASTE THE FUNCTION RIGHT HERE 👇
-            function createSlug(title, location) {
-                const str = `${title} ${location}`;
-                return str
-                    .toLowerCase()
-                    .replace(/\s+/g, '-')           // Replace spaces with -
-                    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-                    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
-                    .replace(/^-+/, '')             // Trim - from start of text
-                    .replace(/-+$/, '');            // Trim - from end of text
-            }
+        function createSlug(title, location) {
+            const str = `${title} ${location}`;
+            return str
+                .toLowerCase()
+                .replace(/\s+/g, '-')           // Replace spaces with -
+                .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+                .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+                .replace(/^-+/, '')             // Trim - from start of text
+                .replace(/-+$/, '');            // Trim - from end of text
+        }
 
         // ===================================
         // NEW FUNCTION TO UPDATE META TAGS
@@ -1474,41 +1487,22 @@
         });
 
         async function populateLocationFilter() {
-                const locations = await getUniqueLocations();
-                const locationSelect = document.getElementById('filter-location');
+            const locations = await getUniqueLocations();
+            const locationSelect = document.getElementById('filter-location');
 
-                // Clear existing options except the first one
-                while (locationSelect.options.length > 1) {
-                    locationSelect.remove(1);
-                }
-
-                // Add new location options
-                locations.forEach(location => {
-                    const option = document.createElement('option');
-                    option.value = location;
-                    option.textContent = location;
-                    locationSelect.appendChild(option);
-                });
+            // Clear existing options except the first one
+            while (locationSelect.options.length > 1) {
+                locationSelect.remove(1);
             }
 
-            // NEW FUNCTION PLACED HERE
-            async function populateDashboardLocationFilter() {
-                const locations = await getUniqueLocations();
-                const locationSelect = document.getElementById('dashboard-filter-location');
-
-                // Clear existing options except the first one
-                while (locationSelect.options.length > 1) {
-                    locationSelect.remove(1);
-                }
-
-                // Add new location options
-                locations.forEach(location => {
-                    const option = document.createElement('option');
-                    option.value = location;
-                    option.textContent = location;
-                    locationSelect.appendChild(option);
-                });
-            }
+            // Add new location options
+            locations.forEach(location => {
+                const option = document.createElement('option');
+                option.value = location;
+                option.textContent = location;
+                locationSelect.appendChild(option);
+            });
+        }
 
         // Render properties to the public view with pagination
         async function renderProperties(properties, isDashboard = false) {
@@ -1846,9 +1840,6 @@
             app.dashboardPropertyList.innerHTML = '<div class="text-center py-8"><div class="loading-spinner mx-auto"></div><p>Loading properties...</p></div>';
             app.myInvestmentsList.innerHTML = '<div class="text-center py-8"><div class="loading-spinner mx-auto"></div><p>Loading your investments...</p></div>';
 
-            // NEW: Populate the dashboard location filter
-            await populateDashboardLocationFilter();
-
             // 1. First update user info
             document.getElementById('user-name').textContent = user.displayName || 'User';
             document.getElementById('account-name').textContent = user.displayName || 'Not set';
@@ -1911,230 +1902,304 @@
 
         // Setup event listeners
         function setupEventListeners() {
-                // Auth modal toggles
-                document.getElementById('show-register').addEventListener('click', showRegisterModal);
-                document.getElementById('show-login').addEventListener('click', showLoginModal);
-                document.getElementById('show-login-from-forgot').addEventListener('click', showLoginModal);
-                document.getElementById('show-forgot-password').addEventListener('click', showForgotPasswordModal);
-                document.getElementById('close-auth-modal').addEventListener('click', () => app.authModal.classList.add('hidden'));
+            // Auth modal toggles
+            document.getElementById('show-register').addEventListener('click', showRegisterModal);
+            document.getElementById('show-login').addEventListener('click', showLoginModal);
+            document.getElementById('show-login-from-forgot').addEventListener('click', showLoginModal);
+            document.getElementById('show-forgot-password').addEventListener('click', showForgotPasswordModal);
+            document.getElementById('close-auth-modal').addEventListener('click', () => app.authModal.classList.add('hidden'));
 
-                // Auth form submissions
-                document.getElementById('login-submit').addEventListener('click', loginUser);
-                document.getElementById('register-submit').addEventListener('click', registerUser);
-                document.getElementById('forgot-submit').addEventListener('click', sendPasswordReset);
+            // Auth form submissions
+            document.getElementById('login-submit').addEventListener('click', loginUser);
+            document.getElementById('register-submit').addEventListener('click', registerUser);
+            document.getElementById('forgot-submit').addEventListener('click', sendPasswordReset);
 
-                // Edit profile
-                document.getElementById('edit-profile').addEventListener('click', showEditProfileModal);
-                document.getElementById('close-edit-modal').addEventListener('click', () => app.editProfileModal.classList.add('hidden'));
-                document.getElementById('save-profile').addEventListener('click', saveProfile);
+            // Edit profile
+            document.getElementById('edit-profile').addEventListener('click', showEditProfileModal);
+            document.getElementById('close-edit-modal').addEventListener('click', () => app.editProfileModal.classList.add('hidden'));
+            document.getElementById('save-profile').addEventListener('click', saveProfile);
 
-                // Payment
-                document.getElementById('paystack-button').addEventListener('click', () => app.paymentModal.classList.remove('hidden'));
-                document.getElementById('close-payment-modal').addEventListener('click', () => app.paymentModal.classList.add('hidden'));
-                document.getElementById('initiate-payment').addEventListener('click', processPayment);
+            // Payment
+            document.getElementById('paystack-button').addEventListener('click', () => app.paymentModal.classList.remove('hidden'));
+            document.getElementById('close-payment-modal').addEventListener('click', () => app.paymentModal.classList.add('hidden'));
+            document.getElementById('initiate-payment').addEventListener('click', processPayment);
 
-                // Sell property
-                document.getElementById('close-sell-modal').addEventListener('click', () => app.sellPropertyModal.classList.add('hidden'));
-                document.getElementById('submit-sale').addEventListener('click', listPropertyForSale);
+            // Sell property
+            document.getElementById('close-sell-modal').addEventListener('click', () => app.sellPropertyModal.classList.add('hidden'));
+            document.getElementById('submit-sale').addEventListener('click', listPropertyForSale);
 
-                // Payment choice modal
-                document.getElementById('close-payment-choice-modal').addEventListener('click', () => app.paymentChoiceModal.classList.add('hidden'));
-                document.getElementById('choice-paystack-btn').addEventListener('click', (e) => {
-                    const propertyId = e.currentTarget.dataset.propertyId;
-                    app.paymentChoiceModal.classList.add('hidden');
-                    getProperty(propertyId).then(property => {
-                        if (property) {
-                            document.getElementById('payment-property').value = property.id;
-                            document.getElementById('payment-price-per-plot').value = property.price;
-                            document.getElementById('payment-plots').value = '1';
-                            calculatePaymentAmount();
-                            document.getElementById('payment-email').value = auth.currentUser?.email || '';
-                            app.paymentModal.classList.remove('hidden');
-                        }
-                    });
-                });
-                document.getElementById('choice-transfer-btn').addEventListener('click', (e) => {
-                    const propertyId = e.currentTarget.dataset.propertyId;
-                    app.paymentChoiceModal.classList.add('hidden');
-                    showReceiptModal();
-                    setTimeout(() => {
-                        const receiptPropertySelect = document.getElementById('receipt-property-select');
-                        if (receiptPropertySelect) {
-                            receiptPropertySelect.value = propertyId;
-                            const event = new Event('change');
-                            receiptPropertySelect.dispatchEvent(event);
-                        }
-                    }, 500);
-                });
+            // DOWN - Add event listeners for the new payment choice modal
+            document.getElementById('close-payment-choice-modal').addEventListener('click', () => app.paymentChoiceModal.classList.add('hidden'));
+            document.getElementById('choice-paystack-btn').addEventListener('click', (e) => {
+                const propertyId = e.currentTarget.dataset.propertyId;
+                app.paymentChoiceModal.classList.add('hidden'); // Hide the choice modal
 
-                // Admin controls
-                document.getElementById('update-investments').addEventListener('click', updateAllInvestments);
-                document.getElementById('add-property').addEventListener('click', () => app.addPropertyModal.classList.remove('hidden'));
-                document.getElementById('close-add-property-modal').addEventListener('click', () => app.addPropertyModal.classList.add('hidden'));
-                document.getElementById('submit-property').addEventListener('click', addNewProperty);
-
-                // Calculator
-                document.getElementById('calculate-price').addEventListener('click', calculateTotalPrice);
-                document.getElementById('proceed-to-payment').addEventListener('click', proceedToPaymentFromCalculator);
-
-                // Filters
-                document.getElementById('apply-filters').addEventListener('click', applyFilters);
-                document.getElementById('search-properties').addEventListener('input', searchProperties);
-                document.getElementById('dashboard-filter-location').addEventListener('change', searchProperties);
-
-                // Reload properties button
-                app.reloadPropertiesBtn.addEventListener('click', () => loadProperties());
-
-                // Pagination
-                document.getElementById('prev-page').addEventListener('click', () => {
-                    if (pagination.currentPage > 1) { pagination.currentPage--; loadProperties(); }
-                });
-                document.getElementById('next-page').addEventListener('click', () => {
-                    if (pagination.currentPage < pagination.totalPages) { pagination.currentPage++; loadProperties(); }
-                });
-                document.getElementById('dashboard-prev-page').addEventListener('click', () => {
-                    if (pagination.currentPage > 1) { pagination.currentPage--; loadProperties(true); }
-                });
-                document.getElementById('dashboard-next-page').addEventListener('click', () => {
-                    if (pagination.currentPage < pagination.totalPages) { pagination.currentPage++; loadProperties(true); }
-                });
-
-                // Terms and conditions
-                document.getElementById('view-terms').addEventListener('click', () => app.termsModal.classList.remove('hidden'));
-                document.getElementById('close-terms-modal').addEventListener('click', () => app.termsModal.classList.add('hidden'));
-                document.getElementById('accept-terms').addEventListener('click', () => {
-                    document.getElementById('accept-terms-checkbox').checked = true;
-                    app.termsModal.classList.add('hidden');
-                    showToast('Terms & Conditions accepted', 'success');
-                });
-
-                // Receipt upload
-                document.getElementById('upload-receipt').addEventListener('click', showReceiptModal);
-                document.getElementById('close-receipt-modal').addEventListener('click', () => app.receiptModal.classList.add('hidden'));
-                document.getElementById('choose-receipt').addEventListener('click', () => document.getElementById('receipt-file').click());
-                document.getElementById('receipt-file').addEventListener('change', handleReceiptFileSelect);
-                document.getElementById('submit-receipt').addEventListener('click', uploadReceipt);
-
-                // Copy buttons
-                document.getElementById('copy-account-name-btn').addEventListener('click', () => {
-                    const textToCopy = document.getElementById('bank-account-name').textContent;
-                    navigator.clipboard.writeText(textToCopy).then(() => showToast('Account Name copied!', 'success')).catch(err => showToast('Failed to copy', 'error'));
-                });
-                document.getElementById('copy-account-number-btn').addEventListener('click', () => {
-                    const textToCopy = document.getElementById('bank-account-number').textContent;
-                    navigator.clipboard.writeText(textToCopy).then(() => showToast('Account Number copied!', 'success')).catch(err => showToast('Failed to copy', 'error'));
-                });
-
-                // Subscription
-                document.getElementById('subscribe-btn').addEventListener('click', handleSubscription);
-
-                // Password toggle
-                document.querySelectorAll('.password-toggle').forEach(button => {
-                    button.addEventListener('click', function () {
-                        const targetId = this.getAttribute('data-target');
-                        const input = document.getElementById(targetId);
-                        if (input.type === 'password') {
-                            input.type = 'text';
-                            this.innerHTML = '<i class="fas fa-eye-slash"></i>';
-                        } else {
-                            input.type = 'password';
-                            this.innerHTML = '<i class="fas fa-eye"></i>';
-                        }
-                    });
-                });
-
-                // Delegated event listeners for dynamic content
-                document.addEventListener('click', function (e) {
-                    // View Details Button
-                    if (e.target.classList.contains('view-details') || e.target.closest('.view-details')) {
-                        // Logic is commented out
+                // Now, trigger the original Paystack payment modal
+                getProperty(propertyId).then(property => {
+                    if (property) {
+                        document.getElementById('payment-property').value = property.id;
+                        document.getElementById('payment-price-per-plot').value = property.price;
+                        document.getElementById('payment-plots').value = '1'; // Default to 1 plot
+                        calculatePaymentAmount(); // Calculate the total amount
+                        document.getElementById('payment-email').value = auth.currentUser?.email || '';
+                        app.paymentModal.classList.remove('hidden'); // Show the Paystack modal
                     }
+                });
+            });
+            document.getElementById('choice-transfer-btn').addEventListener('click', (e) => {
+                const propertyId = e.currentTarget.dataset.propertyId;
+                app.paymentChoiceModal.classList.add('hidden'); // Hide the choice modal
 
-                    // Pay buttons
-                    if (e.target.classList.contains('pay-button') || e.target.closest('.pay-button')) {
-                        const button = e.target.classList.contains('pay-button') ? e.target : e.target.closest('.pay-button');
+                // Now, trigger the existing "Upload Receipt" modal
+                showReceiptModal();
+
+                // Pre-select the property in the receipt modal
+                // We need a slight delay for the property list to populate in showReceiptModal
+                setTimeout(() => {
+                    const receiptPropertySelect = document.getElementById('receipt-property-select');
+                    if (receiptPropertySelect) {
+                        receiptPropertySelect.value = propertyId;
+                        // Manually trigger the 'onchange' event to update the price fields
+                        const event = new Event('change');
+                        receiptPropertySelect.dispatchEvent(event);
+                    }
+                }, 500); // 500ms should be enough for properties to load
+            });
+            // UP
+
+            // Admin controls
+            document.getElementById('update-investments').addEventListener('click', updateAllInvestments);
+            document.getElementById('add-property').addEventListener('click', () => app.addPropertyModal.classList.remove('hidden'));
+            document.getElementById('close-add-property-modal').addEventListener('click', () => app.addPropertyModal.classList.add('hidden'));
+            document.getElementById('submit-property').addEventListener('click', addNewProperty);
+
+            // Calculator
+            document.getElementById('calculate-price').addEventListener('click', calculateTotalPrice);
+            document.getElementById('proceed-to-payment').addEventListener('click', proceedToPaymentFromCalculator);
+
+            // Filters
+            document.getElementById('apply-filters').addEventListener('click', applyFilters);
+            document.getElementById('search-properties').addEventListener('input', searchProperties);
+
+            // Reload properties button
+            app.reloadPropertiesBtn.addEventListener('click', () => loadProperties());
+
+            // Pagination
+            document.getElementById('prev-page').addEventListener('click', () => {
+                if (pagination.currentPage > 1) {
+                    pagination.currentPage--;
+                    loadProperties();
+                }
+            });
+
+            document.getElementById('next-page').addEventListener('click', () => {
+                if (pagination.currentPage < pagination.totalPages) {
+                    pagination.currentPage++;
+                    loadProperties();
+                }
+            });
+
+            document.getElementById('dashboard-prev-page').addEventListener('click', () => {
+                if (pagination.currentPage > 1) {
+                    pagination.currentPage--;
+                    loadProperties(true);
+                }
+            });
+
+            document.getElementById('dashboard-next-page').addEventListener('click', () => {
+                if (pagination.currentPage < pagination.totalPages) {
+                    pagination.currentPage++;
+                    loadProperties(true);
+                }
+            });
+
+            // Terms and conditions
+            document.getElementById('view-terms').addEventListener('click', () => app.termsModal.classList.remove('hidden'));
+            document.getElementById('close-terms-modal').addEventListener('click', () => app.termsModal.classList.add('hidden'));
+            document.getElementById('accept-terms').addEventListener('click', () => {
+                document.getElementById('accept-terms-checkbox').checked = true;
+                app.termsModal.classList.add('hidden');
+                showToast('Terms & Conditions accepted', 'success');
+            });
+
+            // Receipt upload
+            document.getElementById('upload-receipt').addEventListener('click', showReceiptModal);
+            document.getElementById('close-receipt-modal').addEventListener('click', () => app.receiptModal.classList.add('hidden'));
+            document.getElementById('choose-receipt').addEventListener('click', () => document.getElementById('receipt-file').click());
+            document.getElementById('receipt-file').addEventListener('change', handleReceiptFileSelect);
+            document.getElementById('submit-receipt').addEventListener('click', uploadReceipt);
+
+            // ================================================================
+            // START: THIS IS THE JAVASCRIPT CODE THAT WAS ADDED
+            // It makes the copy icons interactive.
+            // ================================================================
+
+            // Copy Bank Account Name
+            document.getElementById('copy-account-name-btn').addEventListener('click', () => {
+                // Get the text from the span with the ID 'bank-account-name'
+                const textToCopy = document.getElementById('bank-account-name').textContent;
+
+                // Use the browser's Clipboard API to copy the text
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    // If successful, show a confirmation message using the existing showToast function
+                    showToast('Account Name copied!', 'success');
+                }).catch(err => {
+                    // If it fails, log the error and show an error message
+                    console.error('Failed to copy text: ', err);
+                    showToast('Failed to copy', 'error');
+                });
+            });
+
+            // Copy Bank Account Number
+            document.getElementById('copy-account-number-btn').addEventListener('click', () => {
+                // Get the text from the span with the ID 'bank-account-number'
+                const textToCopy = document.getElementById('bank-account-number').textContent;
+
+                // Use the browser's Clipboard API to copy the text
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    // If successful, show a confirmation message
+                    showToast('Account Number copied!', 'success');
+                }).catch(err => {
+                    // If it fails, log the error and show an error message
+                    console.error('Failed to copy text: ', err);
+                    showToast('Failed to copy', 'error');
+                });
+            });
+
+            // ================================================================
+            // END OF THE ADDED JAVASCRIPT CODE
+            // ================================================================
+
+            // =========== NEW SUBSCRIPTION EVENT LISTENER START ===========
+            document.getElementById('subscribe-btn').addEventListener('click', handleSubscription);
+            // =========== NEW SUBSCRIPTION EVENT LISTENER END ===========
+
+            // Password toggle
+            document.querySelectorAll('.password-toggle').forEach(button => {
+                button.addEventListener('click', function () {
+                    const targetId = this.getAttribute('data-target');
+                    const input = document.getElementById(targetId);
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        this.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                    } else {
+                        input.type = 'password';
+                        this.innerHTML = '<i class="fas fa-eye"></i>';
+                    }
+                });
+            });
+
+            // Delegated event listeners for dynamic content
+            document.addEventListener('click', function (e) {
+                // View Details Button
+                if (e.target.classList.contains('view-details') || e.target.closest('.view-details')) {
+
+                    /* <-- ADD THIS LINE to start the comment
+                    const user = auth.currentUser;
+                    if (!user) {
+                        showLoginModal();
+                        showAuthMessage("Please log in to view property details and make a secure payment.", "info");
+                    } else {
+                        // Existing functionality for logged-in users
+                        const button = e.target.classList.contains('view-details') ? e.target : e.target.closest('.view-details');
                         const propertyId = button.dataset.id;
-                        showPaymentChoiceModal(propertyId);
+                        // Implement what should happen when a logged-in user clicks "View Details"
+                        // For example, show a modal with more details.
+                        console.log("Viewing details for property:", propertyId);
                     }
+                    */  // <-- ADD THIS LINE to end the comment
+                }
 
-                    // Sell property buttons
-                    if (e.target.classList.contains('sell-property') || e.target.closest('.sell-property')) {
-                        const button = e.target.classList.contains('sell-property') ? e.target : e.target.closest('.sell-property');
-                        const investmentId = button.dataset.id;
-                        document.getElementById('sell-property-select').value = investmentId;
-                        if (confirm('Are you sure you want to list this property for sale? This will open the sale details form.')) {
-                            app.sellPropertyModal.classList.remove('hidden');
-                        }
-                    }
+                // Pay buttons
+                if (e.target.classList.contains('pay-button') || e.target.closest('.pay-button')) {
+                    // DOWN - New logic to show payment choice
+                    const button = e.target.classList.contains('pay-button') ? e.target : e.target.closest('.pay-button');
+                    const propertyId = button.dataset.id;
+                    showPaymentChoiceModal(propertyId);
+                    // UP
+                }
 
-                    // View receipt buttons
-                    if (e.target.classList.contains('view-receipt') || e.target.closest('.view-receipt')) {
-                        const button = e.target.classList.contains('view-receipt') ? e.target : e.target.closest('.view-receipt');
-                        const investmentId = button.dataset.id;
-                        viewReceipt(investmentId);
+                // Sell property buttons from investment list
+                if (e.target.classList.contains('sell-property') || e.target.closest('.sell-property')) {
+                    const button = e.target.classList.contains('sell-property') ? e.target : e.target.closest('.sell-property');
+                    const investmentId = button.dataset.id;
+
+                    document.getElementById('sell-property-select').value = investmentId;
+
+                    const confirmSell = confirm('Are you sure you want to list this property for sale? This will open the sale details form.');
+                    if (confirmSell) {
+                        app.sellPropertyModal.classList.remove('hidden');
                     }
-                });
-            }
+                }
+
+                // View receipt buttons
+                if (e.target.classList.contains('view-receipt') || e.target.closest('.view-receipt')) {
+                    const button = e.target.classList.contains('view-receipt') ? e.target : e.target.closest('.view-receipt');
+                    const investmentId = button.dataset.id;
+                    viewReceipt(investmentId);
+                }
+            });
+        }
 
         // =========== NEW SUBSCRIPTION HANDLER FUNCTION START ===========
-            async function handleSubscription() {
-                    // ⬇️ PASTE THE WEB APP URL YOU COPIED FROM GOOGLE APPS SCRIPT HERE ⬇️
-                    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwUq8o-0-MjUaLkYfMt777FGqyV--OzsqfApGfI24DIJWmFuE8syD4P6n3_a8xANAqJ/exec';
+        async function handleSubscription() {
+            // ⬇️ PASTE THE WEB APP URL YOU COPIED FROM GOOGLE APPS SCRIPT HERE ⬇️
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwUq8o-0-MjUaLkYfMt777FGqyV--OzsqfApGfI24DIJWmFuE8syD4P6n3_a8xANAqJ/exec';
 
-                    const emailInput = document.getElementById('subscribe-email');
-                    const email = emailInput.value;
-                    const messageDiv = document.getElementById('subscribe-message');
-                    const subscribeBtn = document.getElementById('subscribe-btn');
+            const emailInput = document.getElementById('subscribe-email');
+            const email = emailInput.value;
+            const messageDiv = document.getElementById('subscribe-message');
+            const subscribeBtn = document.getElementById('subscribe-btn');
 
-                    if (!email || !email.includes('@')) {
-                        messageDiv.textContent = 'Please enter a valid email address.';
-                        messageDiv.className = 'mt-2 text-sm text-red-400';
-                        return;
-                    }
+            if (!email || !email.includes('@')) {
+                messageDiv.textContent = 'Please enter a valid email address.';
+                messageDiv.className = 'mt-2 text-sm text-red-400';
+                return;
+            }
 
-                    subscribeBtn.disabled = true;
-                    subscribeBtn.textContent = '...';
+            subscribeBtn.disabled = true;
+            subscribeBtn.textContent = '...';
 
-                    try {
-                        // This sends the data to your Google Script.
-                        fetch(SCRIPT_URL, {
-                            method: 'POST',
-                            mode: 'no-cors', // Required for Google Scripts
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ email: email }),
-                        });
+            try {
+                // This sends the data to your Google Script.
+                fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // Required for Google Scripts
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email }),
+                });
 
-                        // ✅ START: SEND ADMIN NOTIFICATION EMAIL
-                        fetch('/.netlify/functions/send-notification', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                to: 'kakaprince46@gmail.com', // Your admin email address
-                                subject: '📣 New Promo Alert Subscription!',
-                                html: `
+                // ✅ START: SEND ADMIN NOTIFICATION EMAIL
+                fetch('/.netlify/functions/send-notification', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        to: 'kakaprince46@gmail.com', // Your admin email address
+                        subject: '📣 New Promo Alert Subscription!',
+                        html: `
                                 <h1>New Subscriber!</h1>
                                 <p>A new user has subscribed to receive promo alerts.</p>
                                 <p><strong>Email:</strong> ${email}</p>
                             `,
-                            }),
-                        });
-                        // ✅ END: SEND ADMIN NOTIFICATION EMAIL
+                    }),
+                });
+                // ✅ END: SEND ADMIN NOTIFICATION EMAIL
 
-                        // If the request goes through, assume success.
-                        messageDiv.textContent = 'Thank you for subscribing!';
-                        messageDiv.className = 'mt-2 text-sm text-green-400';
-                        emailInput.value = '';
+                // If the request goes through, assume success.
+                messageDiv.textContent = 'Thank you for subscribing!';
+                messageDiv.className = 'mt-2 text-sm text-green-400';
+                emailInput.value = '';
 
-                    } catch (error) {
-                        console.error('Subscription Error:', error);
-                        messageDiv.textContent = 'Could not connect. Please try again.';
-                        messageDiv.className = 'mt-2 text-sm text-red-400';
-                    } finally {
-                        subscribeBtn.disabled = false;
-                        subscribeBtn.textContent = 'Subscribe';
-                    }
-                }
-                // =========== NEW SUBSCRIPTION HANDLER FUNCTION END ===========
+            } catch (error) {
+                console.error('Subscription Error:', error);
+                messageDiv.textContent = 'Could not connect. Please try again.';
+                messageDiv.className = 'mt-2 text-sm text-red-400';
+            } finally {
+                subscribeBtn.disabled = false;
+                subscribeBtn.textContent = 'Subscribe';
+            }
+        }
+        // =========== NEW SUBSCRIPTION HANDLER FUNCTION END ===========
 
         // Show login modal
         function showLoginModal() {
@@ -2305,7 +2370,7 @@
             }
         }
 
-       // [CORRECTED] Upload receipt to Firestore and create an investment
+        // [CORRECTED] Upload receipt to Firestore and create an investment
         async function uploadReceipt() {
             const propertyId = document.getElementById('receipt-property-select').value;
             const fileInput = document.getElementById('receipt-file');
@@ -2579,54 +2644,54 @@
 
         // Register user
         function registerUser() {
-                const name = document.getElementById('register-name').value;
-                const email = document.getElementById('register-email').value;
-                const phone = document.getElementById('register-phone').value;
-                const location = document.getElementById('register-location').value;
-                const password = document.getElementById('register-password').value;
-                const confirmPassword = document.getElementById('register-confirm-password').value;
-                const acceptTerms = document.getElementById('accept-terms-checkbox').checked;
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const phone = document.getElementById('register-phone').value;
+            const location = document.getElementById('register-location').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            const acceptTerms = document.getElementById('accept-terms-checkbox').checked;
 
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(email)) { showAuthMessage('Please enter a valid email address', 'error'); return; }
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) { showAuthMessage('Please enter a valid email address', 'error'); return; }
 
-                const phoneRegex = /^[0-9]{11}$/;
-                if (phone && !phoneRegex.test(phone)) { showAuthMessage('Please enter a valid 11-digit phone number', 'error'); return; }
+            const phoneRegex = /^[0-9]{11}$/;
+            if (phone && !phoneRegex.test(phone)) { showAuthMessage('Please enter a valid 11-digit phone number', 'error'); return; }
 
-                if (!name || !email || !password || !confirmPassword) { showAuthMessage('Please fill in all required fields', 'error'); return; }
-                if (password !== confirmPassword) { showAuthMessage('Passwords do not match', 'error'); return; }
-                if (password.length < 6) { showAuthMessage('Password must be at least 6 characters', 'error'); return; }
-                if (!acceptTerms) { showAuthMessage('You must accept the Terms & Conditions to register', 'error'); return; }
+            if (!name || !email || !password || !confirmPassword) { showAuthMessage('Please fill in all required fields', 'error'); return; }
+            if (password !== confirmPassword) { showAuthMessage('Passwords do not match', 'error'); return; }
+            if (password.length < 6) { showAuthMessage('Password must be at least 6 characters', 'error'); return; }
+            if (!acceptTerms) { showAuthMessage('You must accept the Terms & Conditions to register', 'error'); return; }
 
-                app.authLoading.classList.remove('hidden');
-                app.registerForm.classList.add('hidden');
-                document.getElementById('auth-loading-text').textContent = 'Creating account...';
+            app.authLoading.classList.remove('hidden');
+            app.registerForm.classList.add('hidden');
+            document.getElementById('auth-loading-text').textContent = 'Creating account...';
 
-                auth.createUserWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        return db.collection('users').doc(userCredential.user.uid).set({
-                            name: name,
-                            phone: phone,
-                            location: location,
-                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                            isAdmin: false,
-                            acceptedTerms: true
-                        }).then(() => {
-                            return userCredential.user.updateProfile({
-                                displayName: name
-                            });
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    return db.collection('users').doc(userCredential.user.uid).set({
+                        name: name,
+                        phone: phone,
+                        location: location,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        isAdmin: false,
+                        acceptedTerms: true
+                    }).then(() => {
+                        return userCredential.user.updateProfile({
+                            displayName: name
                         });
-                    })
-                    .then(() => {
-                        // ✅ START: EMAIL NOTIFICATION LOGIC
-                        try {
-                            fetch('/.netlify/functions/send-notification', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    to: 'kakaprince46@gmail.com', // Your admin email address
-                                    subject: '🎉 New User Registration on NaijaLand!',
-                                    html: `
+                    });
+                })
+                .then(() => {
+                    // ✅ START: EMAIL NOTIFICATION LOGIC
+                    try {
+                        fetch('/.netlify/functions/send-notification', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                to: 'kakaprince46@gmail.com', // Your admin email address
+                                subject: '🎉 New User Registration on NaijaLand!',
+                                html: `
                                     <h1>New User Alert!</h1>
                                     <p>A new user has just registered on the NaijaLand platform.</p>
                                     <ul>
@@ -2637,24 +2702,24 @@
                                     </ul>
                                     <p>You can view their details in the Firebase console.</p>
                                 `,
-                                }),
-                            });
-                        } catch (emailError) {
-                            console.error('Failed to send registration notification email:', emailError);
-                            // Don't block the user flow, just log the error
-                        }
-                        // ✅ END: EMAIL NOTIFICATION LOGIC
-                        app.authModal.classList.add('hidden');
-                    })
-                    .catch((error) => {
-                        let errorMessage = error.message;
-                        if (error.code === 'auth/email-already-in-use') { errorMessage = 'Email address is already in use'; }
-                        else if (error.code === 'auth/invalid-email') { errorMessage = 'Email address is invalid'; }
-                        else if (error.code === 'auth/weak-password') { errorMessage = 'Password is too weak'; }
-                        showAuthMessage(errorMessage, 'error');
-                        app.authLoading.classList.add('hidden');
-                        app.registerForm.classList.remove('hidden');
-                    });
+                            }),
+                        });
+                    } catch (emailError) {
+                        console.error('Failed to send registration notification email:', emailError);
+                        // Don't block the user flow, just log the error
+                    }
+                    // ✅ END: EMAIL NOTIFICATION LOGIC
+                    app.authModal.classList.add('hidden');
+                })
+                .catch((error) => {
+                    let errorMessage = error.message;
+                    if (error.code === 'auth/email-already-in-use') { errorMessage = 'Email address is already in use'; }
+                    else if (error.code === 'auth/invalid-email') { errorMessage = 'Email address is invalid'; }
+                    else if (error.code === 'auth/weak-password') { errorMessage = 'Password is too weak'; }
+                    showAuthMessage(errorMessage, 'error');
+                    app.authLoading.classList.add('hidden');
+                    app.registerForm.classList.remove('hidden');
+                });
         }
 
         // Send password reset
@@ -2756,18 +2821,18 @@
         }
 
         async function handleSuccessfulPayment(response, amount, plots, property) {
-                showToast(`Payment of ₦${parseInt(amount).toLocaleString()} completed for ${property.title}`, 'success');
-                showPaymentSuccess(property, amount);
+            showToast(`Payment of ₦${parseInt(amount).toLocaleString()} completed for ${property.title}`, 'success');
+            showPaymentSuccess(property, amount);
 
-                // EMAIL NOTIFICATION LOGIC
-                try {
-                    await fetch('/.netlify/functions/send-notification', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            to: 'smartprincenet@gmail.com', // Your admin email
-                            subject: `New Paystack Payment for ${property.title}`,
-                            html: `
+            // EMAIL NOTIFICATION LOGIC
+            try {
+                await fetch('/.netlify/functions/send-notification', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        to: 'smartprincenet@gmail.com', // Your admin email
+                        subject: `New Paystack Payment for ${property.title}`,
+                        html: `
                     <h1>New Successful Paystack Payment</h1>
                     <p>A new payment has been completed successfully.</p>
                     <ul>
@@ -2778,34 +2843,34 @@
                         <li><strong>Paystack Reference:</strong> ${response.reference}</li>
                     </ul>
                 `,
-                        }),
-                    });
-                } catch (emailError) { // The semicolon before this line is now gone.
-                    console.error('Failed to send payment notification email:', emailError);
-                }
+                    }),
+                });
+            } catch (emailError) { // The semicolon before this line is now gone.
+                console.error('Failed to send payment notification email:', emailError);
+            }
 
-                await addInvestmentWithTransaction(
-                    auth.currentUser.uid,
-                    property.id,
-                    property.title,
-                    parseInt(amount),
-                    plots,
-                    property.location,
-                    response.reference
-                );
+            await addInvestmentWithTransaction(
+                auth.currentUser.uid,
+                property.id,
+                property.title,
+                parseInt(amount),
+                plots,
+                property.location,
+                response.reference
+            );
 
-                const notification = document.createElement('div');
-                notification.className = 'fixed bottom-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center';
-                notification.innerHTML = `
+            const notification = document.createElement('div');
+            notification.className = 'fixed bottom-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center';
+            notification.innerHTML = `
         <i class="fas fa-check-circle mr-2"></i>
         <span>Your dashboard has been updated with your new investment</span>
     `;
-                document.body.appendChild(notification);
+            document.body.appendChild(notification);
 
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 5000);
-            }
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 5000);
+        }
         // Process payment with Paystack
         async function processPayment() {
             const propertyId = document.getElementById('payment-property').value;
@@ -2965,68 +3030,68 @@
 
         // Add new property (admin function)
         async function addNewProperty() {
-                const title = document.getElementById('property-title').value;
-                const price = document.getElementById('property-price').value;
-                const sqm = document.getElementById('property-sqm').value;
-                const location = document.getElementById('property-location').value;
-                const description = document.getElementById('property-description').value;
-                const image = document.getElementById('property-image').value;
-                const videoLink = document.getElementById('property-video-link').value;
+            const title = document.getElementById('property-title').value;
+            const price = document.getElementById('property-price').value;
+            const sqm = document.getElementById('property-sqm').value;
+            const location = document.getElementById('property-location').value;
+            const description = document.getElementById('property-description').value;
+            const image = document.getElementById('property-image').value;
+            const videoLink = document.getElementById('property-video-link').value;
 
-                if (!title || !price || !sqm || !location || !description) {
-                    showPropertyMessage('Please fill in all required fields', 'error');
-                    return;
+            if (!title || !price || !sqm || !location || !description) {
+                showPropertyMessage('Please fill in all required fields', 'error');
+                return;
+            }
+
+            const submitButton = document.getElementById('submit-property');
+            const originalText = submitButton.innerHTML;
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<div class="loading-spinner mx-auto"></div> Adding...';
+
+            try {
+
+                // Generate the slug
+                const slug = createSlug(title, location);
+
+                // 1. Create a single data object to hold all property information
+                const propertyData = {
+                    title: title,
+                    price: parseFloat(price),
+                    sqm: parseFloat(sqm),
+                    location: location,
+                    description: description,
+                    image: image || "https://i.postimg.cc/RC3ZS7gj/apex-1.jpg",
+                    status: "available",
+                    slug: slug, // 👈 ADD THIS LINE
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+
+                // 2. If a video link was entered, add it to the data object
+                if (videoLink) {
+                    propertyData.videoLink = videoLink;
                 }
 
-                const submitButton = document.getElementById('submit-property');
-                const originalText = submitButton.innerHTML;
-                submitButton.disabled = true;
-                submitButton.innerHTML = '<div class="loading-spinner mx-auto"></div> Adding...';
+                // 3. Save the single, complete data object to Firestore ONLY ONCE
+                await db.collection('properties').add(propertyData);
 
-                try {
+                showPropertyMessage(`New property "${title}" has been added`, 'success');
+                loadProperties(true);
 
-                    // Generate the slug
-const slug = createSlug(title, location);
+                // 4. Correctly reset the form fields by clearing their values
+                document.getElementById('property-title').value = '';
+                document.getElementById('property-price').value = '';
+                document.getElementById('property-sqm').value = '';
+                document.getElementById('property-location').value = '';
+                document.getElementById('property-description').value = '';
+                document.getElementById('property-image').value = '';
+                document.getElementById('property-video-link').value = '';
 
-                    // 1. Create a single data object to hold all property information
-                    const propertyData = {
-                        title: title,
-                        price: parseFloat(price),
-                        sqm: parseFloat(sqm),
-                        location: location,
-                        description: description,
-                        image: image || "https://i.postimg.cc/RC3ZS7gj/apex-1.jpg",
-                        status: "available",
-                        slug: slug, // 👈 ADD THIS LINE
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    };
-
-                    // 2. If a video link was entered, add it to the data object
-                    if (videoLink) {
-                        propertyData.videoLink = videoLink;
-                    }
-
-                    // 3. Save the single, complete data object to Firestore ONLY ONCE
-                    await db.collection('properties').add(propertyData);
-
-                    showPropertyMessage(`New property "${title}" has been added`, 'success');
-                    loadProperties(true);
-
-                    // 4. Correctly reset the form fields by clearing their values
-                    document.getElementById('property-title').value = '';
-                    document.getElementById('property-price').value = '';
-                    document.getElementById('property-sqm').value = '';
-                    document.getElementById('property-location').value = '';
-                    document.getElementById('property-description').value = '';
-                    document.getElementById('property-image').value = '';
-                    document.getElementById('property-video-link').value = '';
-
-                    setTimeout(() => { app.addPropertyModal.classList.add('hidden'); }, 1500);
-                } catch (error) {
-                    showPropertyMessage('Error adding property: ' + error.message, 'error');
-                } finally {
-                    submitButton.disabled = false;
-                    submitButton.innerHTML = originalText;
+                setTimeout(() => { app.addPropertyModal.classList.add('hidden'); }, 1500);
+            } catch (error) {
+                showPropertyMessage('Error adding property: ' + error.message, 'error');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalText;
             }
         }
 
@@ -3093,27 +3158,18 @@ const slug = createSlug(title, location);
 
         // Search properties
         async function searchProperties() {
-                const query = document.getElementById('search-properties').value.toLowerCase();
-                // NEW: Get the selected location from the dashboard filter
-                const location = document.getElementById('dashboard-filter-location').value;
+            const query = document.getElementById('search-properties').value.toLowerCase();
+            const allProperties = await getProperties({ status: null }); // Search all statuses in dashboard
 
-                // Get all properties first
-                const allProperties = await getProperties({ status: null }); // Search all statuses in dashboard
+            const filtered = allProperties.filter(property => {
+                return property.title.toLowerCase().includes(query) ||
+                    property.location.toLowerCase().includes(query) ||
+                    property.description.toLowerCase().includes(query);
+            });
 
-                // Apply filters
-                const filtered = allProperties.filter(property => {
-                    const matchesLocation = !location || property.location === location;
-                    const matchesQuery = !query ||
-                        property.title.toLowerCase().includes(query) ||
-                        property.location.toLowerCase().includes(query) ||
-                        property.description.toLowerCase().includes(query);
-
-                    return matchesLocation && matchesQuery;
-                });
-
-                pagination.currentPage = 1;
-                renderProperties(filtered, true);
-            }
+            pagination.currentPage = 1;
+            renderProperties(filtered, true);
+        }
 
         // Helper function to show toast messages
         function showToast(message, type) {
@@ -3134,26 +3190,26 @@ const slug = createSlug(title, location);
 
     <script>
         window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                const deferredPrompt = e;
+            e.preventDefault();
+            const deferredPrompt = e;
 
-                const installButton = document.createElement('button');
-                installButton.textContent = 'Install App';
-                // CHANGE: We've changed 'right-4' to 'left-4' to move the button
-                installButton.className = 'fixed bottom-4 left-4 bg-green-600 text-white px-4 py-2 rounded-lg z-50';
-                installButton.onclick = () => {
-                    deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then((choiceResult) => {
-                        if (choiceResult.outcome === 'accepted') {
-                            console.log('User accepted install prompt');
-                        } else {
-                            console.log('User dismissed install prompt');
-                        }
-                        document.body.removeChild(installButton);
-                    });
-                };
-                document.body.appendChild(installButton);
-            });
+            const installButton = document.createElement('button');
+            installButton.textContent = 'Install App';
+            // CHANGE: We've changed 'right-4' to 'left-4' to move the button
+            installButton.className = 'fixed bottom-4 left-4 bg-green-600 text-white px-4 py-2 rounded-lg z-50';
+            installButton.onclick = () => {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted install prompt');
+                    } else {
+                        console.log('User dismissed install prompt');
+                    }
+                    document.body.removeChild(installButton);
+                });
+            };
+            document.body.appendChild(installButton);
+        });
     </script>
 
     <script>
@@ -3168,7 +3224,7 @@ const slug = createSlug(title, location);
                     });
             });
         }
-    
+
     </script>
 
     <div id="chatbot-container" class="fixed bottom-5 right-5 z-50">
@@ -3319,18 +3375,18 @@ const slug = createSlug(title, location);
         });
     </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const announcementBar = document.getElementById('announcement-bar');
-        const closeButton = document.getElementById('close-announcement');
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const announcementBar = document.getElementById('announcement-bar');
+            const closeButton = document.getElementById('close-announcement');
 
-        if (closeButton) {
-            closeButton.addEventListener('click', () => {
-                announcementBar.classList.add('hidden');
-            });
-        }
-    });
-</script>
+            if (closeButton) {
+                closeButton.addEventListener('click', () => {
+                    announcementBar.classList.add('hidden');
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>
