@@ -283,30 +283,26 @@
                         </section>
 
                         <section class="mb-8">
-                            <div class="flex justify-between items-center mb-4">
+                            <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
                                 <h2 class="text-2xl font-bold text-green-800">Available Properties</h2>
-                                <div class="relative">
-                                    <input type="text" id="search-properties" placeholder="Search properties..."
-                                        class="pl-10 pr-4 py-2 border rounded-lg w-full md:w-64">
-                                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                                <div class="flex flex-col md:flex-row items-center gap-4">
+                                    <div class="relative">
+                                        <select id="dashboard-filter-location" class="p-2 border rounded-lg w-full md:w-48">
+                                            <option value="">All Locations</option>
+                                        </select>
+                                    </div>
+                                    <div class="relative">
+                                        <input type="text" id="search-properties" placeholder="Search properties..."
+                                            class="pl-10 pr-4 py-2 border rounded-lg w-full md:w-64">
+                                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                                    </div>
                                 </div>
                             </div>
-
+                        
                             <div id="dashboard-property-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             </div>
-
-                            <div id="dashboard-pagination" class="flex justify-center mt-8 hidden">
-                                <button id="dashboard-prev-page"
-                                    class="px-4 py-2 bg-gray-200 rounded-l-md mr-1 disabled:opacity-50" disabled>
-                                    <i class="fas fa-chevron-left"></i> Previous
-                                </button>
-                                <div id="dashboard-page-numbers" class="flex">
-                                </div>
-                                <button id="dashboard-next-page"
-                                    class="px-4 py-2 bg-gray-200 rounded-r-md ml-1 disabled:opacity-50">
-                                    Next <i class="fas fa-chevron-right"></i>
-                                </button>
-                            </div>
+                        
+                            ...
                         </section>
 
                         <section class="bg-white p-6 rounded-lg shadow-md mb-8">
@@ -1478,22 +1474,41 @@
         });
 
         async function populateLocationFilter() {
-            const locations = await getUniqueLocations();
-            const locationSelect = document.getElementById('filter-location');
+                const locations = await getUniqueLocations();
+                const locationSelect = document.getElementById('filter-location');
 
-            // Clear existing options except the first one
-            while (locationSelect.options.length > 1) {
-                locationSelect.remove(1);
+                // Clear existing options except the first one
+                while (locationSelect.options.length > 1) {
+                    locationSelect.remove(1);
+                }
+
+                // Add new location options
+                locations.forEach(location => {
+                    const option = document.createElement('option');
+                    option.value = location;
+                    option.textContent = location;
+                    locationSelect.appendChild(option);
+                });
             }
 
-            // Add new location options
-            locations.forEach(location => {
-                const option = document.createElement('option');
-                option.value = location;
-                option.textContent = location;
-                locationSelect.appendChild(option);
-            });
-        }
+            // NEW FUNCTION PLACED HERE
+            async function populateDashboardLocationFilter() {
+                const locations = await getUniqueLocations();
+                const locationSelect = document.getElementById('dashboard-filter-location');
+
+                // Clear existing options except the first one
+                while (locationSelect.options.length > 1) {
+                    locationSelect.remove(1);
+                }
+
+                // Add new location options
+                locations.forEach(location => {
+                    const option = document.createElement('option');
+                    option.value = location;
+                    option.textContent = location;
+                    locationSelect.appendChild(option);
+                });
+            }
 
         // Render properties to the public view with pagination
         async function renderProperties(properties, isDashboard = false) {
@@ -1831,6 +1846,9 @@
             app.dashboardPropertyList.innerHTML = '<div class="text-center py-8"><div class="loading-spinner mx-auto"></div><p>Loading properties...</p></div>';
             app.myInvestmentsList.innerHTML = '<div class="text-center py-8"><div class="loading-spinner mx-auto"></div><p>Loading your investments...</p></div>';
 
+            // NEW: Populate the dashboard location filter
+            await populateDashboardLocationFilter();
+
             // 1. First update user info
             document.getElementById('user-name').textContent = user.displayName || 'User';
             document.getElementById('account-name').textContent = user.displayName || 'Not set';
@@ -1892,7 +1910,7 @@
         }
 
         // Setup event listeners
-        function setupEventListeners() {
+       function setupEventListeners() {
             // Auth modal toggles
             document.getElementById('show-register').addEventListener('click', showRegisterModal);
             document.getElementById('show-login').addEventListener('click', showLoginModal);
@@ -1971,6 +1989,9 @@
             // Filters
             document.getElementById('apply-filters').addEventListener('click', applyFilters);
             document.getElementById('search-properties').addEventListener('input', searchProperties);
+            // NEW: Event listener for the dashboard location filter is now in its correct place
+            document.getElementById('dashboard-filter-location').addEventListener('change', searchProperties);
+
 
             // Reload properties button
             app.reloadPropertiesBtn.addEventListener('click', () => loadProperties());
@@ -2019,6 +2040,7 @@
             document.getElementById('choose-receipt').addEventListener('click', () => document.getElementById('receipt-file').click());
             document.getElementById('receipt-file').addEventListener('change', handleReceiptFileSelect);
             document.getElementById('submit-receipt').addEventListener('click', uploadReceipt);
+        }
 
             // ================================================================
             // START: THIS IS THE JAVASCRIPT CODE THAT WAS ADDED
@@ -2620,7 +2642,7 @@
                         errorMessage = 'Incorrect password. Please try again.';
                     } else {
                         // This is a fallback for any other unexpected errors
-                        errorMessage = 'Login failed. Please check your connection and try again.';
+                        errorMessage = 'Login failed. Please check your password and try again.';
                         console.error("Firebase Login Error:", error); // Log the technical error for your own debugging
                     }
 
@@ -3149,18 +3171,27 @@ const slug = createSlug(title, location);
 
         // Search properties
         async function searchProperties() {
-            const query = document.getElementById('search-properties').value.toLowerCase();
-            const allProperties = await getProperties({ status: null }); // Search all statuses in dashboard
+                const query = document.getElementById('search-properties').value.toLowerCase();
+                // NEW: Get the selected location from the dashboard filter
+                const location = document.getElementById('dashboard-filter-location').value;
 
-            const filtered = allProperties.filter(property => {
-                return property.title.toLowerCase().includes(query) ||
-                    property.location.toLowerCase().includes(query) ||
-                    property.description.toLowerCase().includes(query);
-            });
+                // Get all properties first
+                const allProperties = await getProperties({ status: null }); // Search all statuses in dashboard
 
-            pagination.currentPage = 1;
-            renderProperties(filtered, true);
-        }
+                // Apply filters
+                const filtered = allProperties.filter(property => {
+                    const matchesLocation = !location || property.location === location;
+                    const matchesQuery = !query ||
+                        property.title.toLowerCase().includes(query) ||
+                        property.location.toLowerCase().includes(query) ||
+                        property.description.toLowerCase().includes(query);
+
+                    return matchesLocation && matchesQuery;
+                });
+
+                pagination.currentPage = 1;
+                renderProperties(filtered, true);
+            }
 
         // Helper function to show toast messages
         function showToast(message, type) {
