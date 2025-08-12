@@ -1923,11 +1923,8 @@
                 console.error("Error loading properties:", error);
                 showToast("Error loading properties", "error");
 
-                // Show reload option on error
-                if (!isDashboard) {
-                    app.propertyLoading.classList.add('hidden');
-                    app.propertyReload.classList.remove('hidden');
-                }
+                // When fetching data fails, redirect to the cached offline page.
+                window.location.href = '/offline.html';
             }
         }
 
