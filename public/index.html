@@ -286,35 +286,41 @@
                         </section>
 
                         <section class="mb-8">
-                            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
+                            <div
+                                class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
                                 <h2 class="text-2xl font-bold text-green-800">Available Properties</h2>
                                 <div class="flex items-center gap-4 w-full md:w-auto">
                                     <div class="relative w-1/2 md:w-48">
-                                        <select id="dashboard-filter-location" class="w-full p-2 border rounded-lg appearance-none">
+                                        <select id="dashboard-filter-location"
+                                            class="w-full p-2 border rounded-lg appearance-none">
                                             <option value="">All Locations</option>
                                         </select>
-                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <div
+                                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                             <i class="fas fa-chevron-down"></i>
                                         </div>
                                     </div>
                                     <div class="relative w-1/2 md:w-64">
                                         <input type="text" id="search-properties" placeholder="Search properties..."
                                             class="pl-10 pr-4 py-2 border rounded-lg w-full">
-                                        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                        <i
+                                            class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
                                     </div>
                                 </div>
                             </div>
-                        
+
                             <div id="dashboard-property-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             </div>
-                        
+
                             <div id="dashboard-pagination" class="flex justify-center mt-8 hidden">
-                                <button id="dashboard-prev-page" class="px-4 py-2 bg-gray-200 rounded-l-md mr-1 disabled:opacity-50" disabled>
+                                <button id="dashboard-prev-page"
+                                    class="px-4 py-2 bg-gray-200 rounded-l-md mr-1 disabled:opacity-50" disabled>
                                     <i class="fas fa-chevron-left"></i> Previous
                                 </button>
                                 <div id="dashboard-page-numbers" class="flex">
                                 </div>
-                                <button id="dashboard-next-page" class="px-4 py-2 bg-gray-200 rounded-r-md ml-1 disabled:opacity-50">
+                                <button id="dashboard-next-page"
+                                    class="px-4 py-2 bg-gray-200 rounded-r-md ml-1 disabled:opacity-50">
                                     Next <i class="fas fa-chevron-right"></i>
                                 </button>
                             </div>
@@ -534,69 +540,93 @@
                 </div>
 
                 <div id="register-form" class="hidden">
-                    <div class="mb-4">
-                        <label class="block text-gray-700 mb-2">Full Name</label>
-                        <input type="text" id="register-name" class="w-full p-3 border rounded-lg"
-                            placeholder="Your full name">
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 mb-2">Email</label>
-                        <input type="email" id="register-email" class="w-full p-3 border rounded-lg"
-                            placeholder="Your email" required>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 mb-2">Phone Number</label>
-                        <input type="tel" id="register-phone" class="w-full p-3 border rounded-lg"
-                            placeholder="Your phone number" pattern="[0-9]{11}" title="Please enter 11 digits">
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 mb-2">Location</label>
-                        <input type="text" id="register-location" class="w-full p-3 border rounded-lg"
-                            placeholder="Your location">
-                    </div>
-                    <div class="mb-4 relative">
-                        <label class="block text-gray-700 mb-2">Password</label>
-                        <div class="relative">
-                            <input type="password" id="register-password" class="w-full p-3 border rounded-lg pr-10"
-                                placeholder="Create password" minlength="6" required>
-                            <button type="button"
-                                class="absolute right-3 top-3 text-gray-500 hover:text-gray-700 focus:outline-none password-toggle"
-                                data-target="register-password">
-                                <i class="fas fa-eye"></i>
-                            </button>
+                    <div id="email-verification-step">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 mb-2">Email</label>
+                            <input type="email" id="register-email" class="w-full p-3 border rounded-lg"
+                                placeholder="Your email" required>
+                        </div>
+                        <div class="mb-6 flex items-start">
+                            <div class="flex items-center h-5">
+                                <input id="accept-terms-checkbox" type="checkbox"
+                                    class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-green-300">
+                            </div>
+                            <label for="accept-terms-checkbox" class="ml-2 text-sm text-gray-700">
+                                I agree to the <button type="button" id="view-terms"
+                                    class="text-green-600 hover:text-green-800">Terms &
+                                    Conditions</button>
+                            </label>
+                        </div>
+                        <button id="send-code-btn"
+                            class="w-full bg-green-700 text-white py-3 rounded-lg hover:bg-green-800 transition mb-4">
+                            Send Verification Code
+                        </button>
+                        <div class="text-center">
+                            <p class="mt-4 text-gray-600">Already have an account? <button id="show-login-from-register"
+                                    class="text-green-700 hover:text-green-900">Login</button></p>
                         </div>
                     </div>
 
-                    <div class="mb-6 relative">
-                        <label class="block text-gray-700 mb-2">Confirm Password</label>
-                        <div class="relative">
-                            <input type="password" id="register-confirm-password"
-                                class="w-full p-3 border rounded-lg pr-10" placeholder="Confirm password" required>
-                            <button type="button"
-                                class="absolute right-3 top-3 text-gray-500 hover:text-gray-700 focus:outline-none password-toggle"
-                                data-target="register-confirm-password">
-                                <i class="fas fa-eye"></i>
-                            </button>
+                    <div id="registration-details" class="hidden">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 mb-2">Full Name</label>
+                            <input type="text" id="register-name" class="w-full p-3 border rounded-lg"
+                                placeholder="Your full name">
                         </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 mb-2">Phone Number</label>
+                            <input type="tel" id="register-phone" class="w-full p-3 border rounded-lg"
+                                placeholder="Your phone number" pattern="[0-9]{11}" title="Please enter 11 digits">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 mb-2">Location</label>
+                            <input type="text" id="register-location" class="w-full p-3 border rounded-lg"
+                                placeholder="Your location">
+                        </div>
+                        <div class="mb-4 relative">
+                            <label class="block text-gray-700 mb-2">Password</label>
+                            <div class="relative">
+                                <input type="password" id="register-password" class="w-full p-3 border rounded-lg pr-10"
+                                    placeholder="Create password" minlength="6" required>
+                                <button type="button"
+                                    class="absolute right-3 top-3 text-gray-500 hover:text-gray-700 focus:outline-none password-toggle"
+                                    data-target="register-password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mb-6 relative">
+                            <label class="block text-gray-700 mb-2">Confirm Password</label>
+                            <div class="relative">
+                                <input type="password" id="register-confirm-password"
+                                    class="w-full p-3 border rounded-lg pr-10" placeholder="Confirm password" required>
+                                <button type="button"
+                                    class="absolute right-3 top-3 text-gray-500 hover:text-gray-700 focus:outline-none password-toggle"
+                                    data-target="register-confirm-password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="verification-code-section">
+                            <p class="text-center text-gray-600 mb-4">A 6-digit code has been sent to your email. Please
+                                enter it below.
+                            </p>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Verification Code</label>
+                                <input type="text" id="verification-code"
+                                    class="w-full p-3 border rounded-lg text-center tracking-widest"
+                                    placeholder="------" maxlength="6">
+                            </div>
+                        </div>
+                        <button id="register-submit"
+                            class="w-full bg-green-700 text-white py-3 rounded-lg hover:bg-green-800 transition mb-4">
+                            Verify & Register
+                        </button>
                     </div>
 
-                    <div class="mb-6 flex items-start">
-                        <div class="flex items-center h-5">
-                            <input id="accept-terms-checkbox" type="checkbox"
-                                class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-green-300">
-                        </div>
-                        <label for="accept-terms-checkbox" class="ml-2 text-sm text-gray-700">
-                            I agree to the <button type="button" id="view-terms"
-                                class="text-green-600 hover:text-green-800">Terms & Conditions</button>
-                        </label>
-                    </div>
-
-                    <button id="register-submit"
-                        class="w-full bg-green-700 text-white py-3 rounded-lg hover:bg-green-800 transition mb-4">
-                        Register
-                    </button>
                     <div class="text-center">
-                        <p class="text-gray-600">Already have an account? <button id="show-login"
+                        <p class="mt-4 text-gray-600">Already have an account? <button id="show-login"
                                 class="text-green-700 hover:text-green-900">Login</button></p>
                     </div>
                 </div>
@@ -1224,11 +1254,11 @@
             const str = `${title} ${location}`;
             return str
                 .toLowerCase()
-                .replace(/\s+/g, '-')           // Replace spaces with -
-                .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-                .replace(/\-\-+/g, '-')         // Replace multiple - with single -
-                .replace(/^-+/, '')             // Trim - from start of text
-                .replace(/-+$/, '');            // Trim - from end of text
+                .replace(/\s+/g, '-') // Replace spaces with -
+                .replace(/[^\w\-]+/g, '') // Remove all non-word chars
+                .replace(/\-\-+/g, '-') // Replace multiple - with single -
+                .replace(/^-+/, '') // Trim - from start of text
+                .replace(/-+$/, ''); // Trim - from end of text
         }
 
         // ===================================
@@ -1312,7 +1342,10 @@
                 if (filters.location) query = query.where('location', '==', filters.location);
 
                 const snapshot = await query.get();
-                const properties = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                const properties = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
 
                 // Update pagination info
                 pagination.totalItems = properties.length;
@@ -1348,7 +1381,10 @@
         async function getProperty(id) {
             try {
                 const doc = await db.collection('properties').doc(id).get();
-                return doc.exists ? { id: doc.id, ...doc.data() } : null;
+                return doc.exists ? {
+                    id: doc.id,
+                    ...doc.data()
+                } : null;
             } catch (error) {
                 console.error("Error getting property:", error);
                 showToast("Error loading property details", "error");
@@ -1491,7 +1527,7 @@
                 }
             });
 
-            // Setup event listeners
+            // ✅ Setup event listeners after DOM is ready
             setupEventListeners();
         });
 
@@ -1514,23 +1550,23 @@
         }
 
         // ✅ ADD THE NEW FUNCTION HERE
-            async function populateDashboardLocationFilter() {
-                const locations = await getUniqueLocations();
-                const locationSelect = document.getElementById('dashboard-filter-location');
+        async function populateDashboardLocationFilter() {
+            const locations = await getUniqueLocations();
+            const locationSelect = document.getElementById('dashboard-filter-location');
 
-                // Clear existing options except the first one
-                while (locationSelect.options.length > 1) {
-                    locationSelect.remove(1);
-                }
-
-                // Add new location options
-                locations.forEach(location => {
-                    const option = document.createElement('option');
-                    option.value = location;
-                    option.textContent = location;
-                    locationSelect.appendChild(option);
-                });
+            // Clear existing options except the first one
+            while (locationSelect.options.length > 1) {
+                locationSelect.remove(1);
             }
+
+            // Add new location options
+            locations.forEach(location => {
+                const option = document.createElement('option');
+                option.value = location;
+                option.textContent = location;
+                locationSelect.appendChild(option);
+            });
+        }
 
         // Render properties to the public view with pagination
         async function renderProperties(properties, isDashboard = false) {
@@ -1892,8 +1928,8 @@
                 loadProperties(true);
 
             } catch (error) {
-                console.error("Error loading dashboard data:", error);
-                showToast("Error loading dashboard data", "error");
+                console.error("Error loading dashboard:", error);
+                showToast("Error loading dashboard", "error");
             }
 
             // Update nav
@@ -1933,13 +1969,19 @@
             // Auth modal toggles
             document.getElementById('show-register').addEventListener('click', showRegisterModal);
             document.getElementById('show-login').addEventListener('click', showLoginModal);
+            // Add this new listener for the login button in the new email form
+            document.getElementById('show-login-from-register').addEventListener('click', showLoginModal);
             document.getElementById('show-login-from-forgot').addEventListener('click', showLoginModal);
             document.getElementById('show-forgot-password').addEventListener('click', showForgotPasswordModal);
             document.getElementById('close-auth-modal').addEventListener('click', () => app.authModal.classList.add('hidden'));
 
             // Auth form submissions
             document.getElementById('login-submit').addEventListener('click', loginUser);
+
+            // MODIFIED: Event listeners for the new button flow
+            document.getElementById('send-code-btn').addEventListener('click', sendVerificationCode);
             document.getElementById('register-submit').addEventListener('click', registerUser);
+
             document.getElementById('forgot-submit').addEventListener('click', sendPasswordReset);
 
             // Edit profile
@@ -2124,19 +2166,19 @@
                 if (e.target.classList.contains('view-details') || e.target.closest('.view-details')) {
 
                     /* <-- ADD THIS LINE to start the comment
-                    const user = auth.currentUser;
-                    if (!user) {
-                        showLoginModal();
-                        showAuthMessage("Please log in to view property details and make a secure payment.", "info");
-                    } else {
-                        // Existing functionality for logged-in users
-                        const button = e.target.classList.contains('view-details') ? e.target : e.target.closest('.view-details');
-                        const propertyId = button.dataset.id;
-                        // Implement what should happen when a logged-in user clicks "View Details"
-                        // For example, show a modal with more details.
-                        console.log("Viewing details for property:", propertyId);
-                    }
-                    */  // <-- ADD THIS LINE to end the comment
+                     const user = auth.currentUser;
+                     if (!user) {
+                         showLoginModal();
+                         showAuthMessage("Please log in to view property details and make a secure payment.", "info");
+                     } else {
+                         // Existing functionality for logged-in users
+                         const button = e.target.classList.contains('view-details') ? e.target : e.target.closest('.view-details');
+                         const propertyId = button.dataset.id;
+                         // Implement what should happen when a logged-in user clicks "View Details"
+                         // For example, show a modal with more details.
+                         console.log("Viewing details for property:", propertyId);
+                     }
+                     */ // <-- ADD THIS LINE to end the comment
                 }
 
                 // Pay buttons
@@ -2194,14 +2236,20 @@
                 fetch(SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors', // Required for Google Scripts
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: email }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email
+                    }),
                 });
 
                 // ✅ START: SEND ADMIN NOTIFICATION EMAIL
                 fetch('/.netlify/functions/send-notification', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify({
                         to: 'kakaprince46@gmail.com', // Your admin email address
                         subject: '📣 New Promo Alert Subscription!',
@@ -2250,6 +2298,14 @@
             app.authLoading.classList.add('hidden');
             app.authMessage.classList.add('hidden');
             document.getElementById('auth-modal-title').textContent = 'Register';
+
+            // ✅ Fix: Make sure the initial email step is visible and the second step is hidden.
+            document.getElementById('email-verification-step').classList.remove('hidden');
+            document.getElementById('registration-details').classList.add('hidden');
+
+            // Make sure to reset the registration form state
+            document.getElementById('send-code-btn').classList.remove('hidden');
+            document.getElementById('register-submit').classList.add('hidden');
         }
 
         // Show forgot password modal
@@ -2309,7 +2365,9 @@
             select.innerHTML = '<option value="">-- Loading Properties --</option>';
 
             try {
-                const properties = await getProperties({ status: 'available' }); // Fetch only available properties
+                const properties = await getProperties({
+                    status: 'available'
+                }); // Fetch only available properties
                 select.innerHTML = '<option value="">-- Select Available Property --</option>';
 
                 properties.forEach(property => {
@@ -2408,12 +2466,30 @@
             const date = document.getElementById('receipt-date').value;
             const user = auth.currentUser;
 
-            if (!user) { showReceiptMessage('You must be logged in.', 'error'); return; }
-            if (!propertyId) { showReceiptMessage('Please select a property.', 'error'); return; }
-            if (!plots || isNaN(plots) || plots <= 0) { showReceiptMessage('Please enter a valid number of plots.', 'error'); return; }
-            if (!fileInput.files[0]) { showReceiptMessage('Please select a receipt file.', 'error'); return; }
-            if (!amount || isNaN(amount) || amount <= 0) { showReceiptMessage('Amount is invalid. Please check plots and price.', 'error'); return; }
-            if (!date) { showReceiptMessage('Please select the payment date.', 'error'); return; }
+            if (!user) {
+                showReceiptMessage('You must be logged in.', 'error');
+                return;
+            }
+            if (!propertyId) {
+                showReceiptMessage('Please select a property.', 'error');
+                return;
+            }
+            if (!plots || isNaN(plots) || plots <= 0) {
+                showReceiptMessage('Please enter a valid number of plots.', 'error');
+                return;
+            }
+            if (!fileInput.files[0]) {
+                showReceiptMessage('Please select a receipt file.', 'error');
+                return;
+            }
+            if (!amount || isNaN(amount) || amount <= 0) {
+                showReceiptMessage('Amount is invalid. Please check plots and price.', 'error');
+                return;
+            }
+            if (!date) {
+                showReceiptMessage('Please select the payment date.', 'error');
+                return;
+            }
 
             const file = fileInput.files[0];
             const reader = new FileReader();
@@ -2479,25 +2555,27 @@
                 try {
                     await fetch('/.netlify/functions/send-notification', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
                         body: JSON.stringify({
                             to: 'kakaprince46@gmail.com', // Your admin email address
                             // This line will now work correctly
                             subject: `New Receipt Upload for ${propertyData.title}`,
                             html: `
-                            <h1>New Payment Receipt Uploaded</h1>
-                            <p>A new payment receipt has been submitted for verification.</p>
-                            <ul>
-                                <li><strong>User:</strong> ${user.email}</li>
-                                <li><strong>Property:</strong> ${propertyData.title}</li>
-                                <li><strong>Plots:</strong> ${plots}</li>
-                                <li><strong>Amount Paid:</strong> ₦${Number(amount).toLocaleString()}</li>
-                            </ul>
-                            <p>Please log in to your dashboard to review and verify this payment.</p>
-                        `,
+                                <h1>New Payment Receipt Uploaded</h1>
+                                <p>A new payment receipt has been submitted for verification.</p>
+                                <ul>
+                                    <li><strong>User:</strong> ${user.email}</li>
+                                    <li><strong>Property:</strong> ${propertyData.title}</li>
+                                    <li><strong>Plots:</strong> ${plots}</li>
+                                    <li><strong>Amount Paid:</strong> ₦${Number(amount).toLocaleString()}</li>
+                                </ul>
+                                <p>Please log in to your dashboard to review and verify this payment.</p>
+                            `,
                         }),
                     });
-                } catch (emailError) {
+                } catch (emailError) { // The semicolon before this line is now gone.
                     console.error('Failed to send receipt notification email:', emailError);
                     // Don't block the user flow, just log the error
                 }
@@ -2671,85 +2749,143 @@
                 });
         }
 
-        // Register user
-        function registerUser() {
-            const name = document.getElementById('register-name').value;
+        // --- START OF NEW REGISTRATION LOGIC ---
+
+        // NEW: Function to send the verification code
+        async function sendVerificationCode() {
             const email = document.getElementById('register-email').value;
-            const phone = document.getElementById('register-phone').value;
-            const location = document.getElementById('register-location').value;
-            const password = document.getElementById('register-password').value;
-            const confirmPassword = document.getElementById('register-confirm-password').value;
             const acceptTerms = document.getElementById('accept-terms-checkbox').checked;
 
+            // --- Perform minimal validation for the first step ---
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) { showAuthMessage('Please enter a valid email address', 'error'); return; }
+            if (!email || !emailRegex.test(email)) {
+                showAuthMessage('Please enter a valid email address', 'error');
+                return;
+            }
+            if (!acceptTerms) {
+                showAuthMessage('You must accept the Terms & Conditions', 'error');
+                return;
+            }
 
-            const phoneRegex = /^[0-9]{11}$/;
-            if (phone && !phoneRegex.test(phone)) { showAuthMessage('Please enter a valid 11-digit phone number', 'error'); return; }
+            // Show loading state
+            showAuthLoading('Sending code...');
 
-            if (!name || !email || !password || !confirmPassword) { showAuthMessage('Please fill in all required fields', 'error'); return; }
-            if (password !== confirmPassword) { showAuthMessage('Passwords do not match', 'error'); return; }
-            if (password.length < 6) { showAuthMessage('Password must be at least 6 characters', 'error'); return; }
-            if (!acceptTerms) { showAuthMessage('You must accept the Terms & Conditions to register', 'error'); return; }
-
-            app.authLoading.classList.remove('hidden');
-            app.registerForm.classList.add('hidden');
-            document.getElementById('auth-loading-text').textContent = 'Creating account...';
-
-            auth.createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    return db.collection('users').doc(userCredential.user.uid).set({
-                        name: name,
-                        phone: phone,
-                        location: location,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        isAdmin: false,
-                        acceptedTerms: true
-                    }).then(() => {
-                        return userCredential.user.updateProfile({
-                            displayName: name
-                        });
-                    });
-                })
-                .then(() => {
-                    // ✅ START: EMAIL NOTIFICATION LOGIC
-                    try {
-                        fetch('/.netlify/functions/send-notification', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                to: 'kakaprince46@gmail.com', // Your admin email address
-                                subject: '🎉 New User Registration on NaijaLand!',
-                                html: `
-                                    <h1>New User Alert!</h1>
-                                    <p>A new user has just registered on the NaijaLand platform.</p>
-                                    <ul>
-                                        <li><strong>Name:</strong> ${name}</li>
-                                        <li><strong>Email:</strong> ${email}</li>
-                                        <li><strong>Phone:</strong> ${phone || 'Not provided'}</li>
-                                        <li><strong>Location:</strong> ${location || 'Not provided'}</li>
-                                    </ul>
-                                    <p>You can view their details in the Firebase console.</p>
-                                `,
-                            }),
-                        });
-                    } catch (emailError) {
-                        console.error('Failed to send registration notification email:', emailError);
-                        // Don't block the user flow, just log the error
-                    }
-                    // ✅ END: EMAIL NOTIFICATION LOGIC
-                    app.authModal.classList.add('hidden');
-                })
-                .catch((error) => {
-                    let errorMessage = error.message;
-                    if (error.code === 'auth/email-already-in-use') { errorMessage = 'Email address is already in use'; }
-                    else if (error.code === 'auth/invalid-email') { errorMessage = 'Email address is invalid'; }
-                    else if (error.code === 'auth/weak-password') { errorMessage = 'Password is too weak'; }
-                    showAuthMessage(errorMessage, 'error');
-                    app.authLoading.classList.add('hidden');
-                    app.registerForm.classList.remove('hidden');
+            try {
+                const response = await fetch('/.netlify/functions/send-verification-code', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email
+                    })
                 });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to send code.');
+                }
+
+               // On success, update the UI to show the next step
+                hideAuthLoading();
+                document.getElementById('email-verification-step').classList.add('hidden');
+                document.getElementById('registration-details').classList.remove('hidden');
+
+                // FIX: This line makes the final registration button visible
+                document.getElementById('register-submit').classList.remove('hidden');
+
+                showAuthMessage('Verification code sent to your email! Please check your inbox.', 'success');
+
+            } catch (error) {
+                hideAuthLoading();
+                showAuthMessage(error.message, 'error');
+            }
         }
+
+        // MODIFIED: The registerUser function now handles the final verification and registration
+        async function registerUser() {
+                const name = document.getElementById('register-name').value;
+                const email = document.getElementById('register-email').value;
+                const phone = document.getElementById('register-phone').value;
+                const location = document.getElementById('register-location').value;
+                const password = document.getElementById('register-password').value;
+                const confirmPassword = document.getElementById('register-confirm-password').value;
+                const code = document.getElementById('verification-code').value;
+
+                // --- Add validation checks here for a better user experience ---
+                if (!name || !email || !phone || !location || !password || !confirmPassword || !code) {
+                    showAuthMessage('All fields are required.', 'error');
+                    return;
+                }
+                if (password !== confirmPassword) {
+                    showAuthMessage('Passwords do not match.', 'error');
+                    return;
+                }
+                if (password.length < 6) {
+                    showAuthMessage('Password must be at least 6 characters.', 'error');
+                    return;
+                }
+
+                showAuthLoading('Completing registration...');
+
+                try {
+                    const response = await fetch('/.netlify/functions/verify-and-register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name,
+                            email,
+                            phone,
+                            location,
+                            password,
+                            code
+                        })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        showAuthMessage(data.message + " You can now log in.", 'success');
+                        // Wait a moment, then show the login form
+                        setTimeout(() => {
+                            showLoginModal();
+                        }, 3000);
+                    } else {
+                        const contentType = response.headers.get("content-type");
+                        if (contentType && contentType.indexOf("application/json") !== -1) {
+                            const errorData = await response.json();
+                            throw new Error(errorData.message || 'Registration failed.');
+                        } else {
+                            const errorText = await response.text();
+                            console.error("Non-JSON error response from server:", errorText);
+                            throw new Error('An unexpected server error occurred. Please try again.');
+                        }
+                    }
+                } catch (error) {
+                    hideAuthLoading();
+                    // Restore the form state and show the error message
+                    document.getElementById('email-verification-step').classList.add('hidden');
+                    document.getElementById('registration-details').classList.remove('hidden');
+                    showAuthMessage(error.message, 'error');
+                }
+            }
+
+        // NEW HELPER FUNCTIONS: To manage the auth loading state
+        function showAuthLoading(message) {
+            app.authLoading.classList.remove('hidden');
+            app.loginForm.classList.add('hidden');
+            app.registerForm.classList.add('hidden');
+            app.forgotPasswordForm.classList.add('hidden');
+            document.getElementById('auth-loading-text').textContent = message;
+        }
+
+        function hideAuthLoading() {
+            app.authLoading.classList.add('hidden');
+            app.registerForm.classList.remove('hidden'); // Show the register form again
+        }
+
+        // --- END OF NEW REGISTRATION LOGIC ---
 
         // Send password reset
         function sendPasswordReset() {
@@ -2784,10 +2920,10 @@
 
         // Show auth message
         function showAuthMessage(message, type) {
-            app.authMessage.textContent = message;
-            app.authMessage.className = `mt-4 p-3 rounded-lg text-center ${type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`;
-            app.authMessage.classList.remove('hidden');
-        }
+                app.authMessage.textContent = message;
+                app.authMessage.className = `mt-4 p-3 rounded-lg text-center ${type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`;
+                app.authMessage.classList.remove('hidden'); // FIX: Changed 'element' to 'app.authMessage'
+            }
 
         // Show edit profile modal
         function showEditProfileModal() {
@@ -2825,7 +2961,9 @@
                     name: name,
                     phone: phone,
                     location: location
-                }, { merge: true }); // <-- Apply this change
+                }, {
+                    merge: true
+                }); // <-- Apply this change
 
                 document.getElementById('user-name').textContent = name;
                 document.getElementById('account-name').textContent = name;
@@ -2857,21 +2995,23 @@
             try {
                 await fetch('/.netlify/functions/send-notification', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify({
                         to: 'smartprincenet@gmail.com', // Your admin email
                         subject: `New Paystack Payment for ${property.title}`,
                         html: `
-                    <h1>New Successful Paystack Payment</h1>
-                    <p>A new payment has been completed successfully.</p>
-                    <ul>
-                        <li><strong>User:</strong> ${auth.currentUser.email}</li>
-                        <li><strong>Property:</strong> ${property.title}</li>
-                        <li><strong>Plots:</strong> ${plots}</li>
-                        <li><strong>Amount Paid:</strong> ₦${parseInt(amount).toLocaleString()}</li>
-                        <li><strong>Paystack Reference:</strong> ${response.reference}</li>
-                    </ul>
-                `,
+                                <h1>New Successful Paystack Payment</h1>
+                                <p>A new payment has been completed successfully.</p>
+                                <ul>
+                                    <li><strong>User:</strong> ${auth.currentUser.email}</li>
+                                    <li><strong>Property:</strong> ${property.title}</li>
+                                    <li><strong>Plots:</strong> ${plots}</li>
+                                    <li><strong>Amount Paid:</strong> ₦${parseInt(amount).toLocaleString()}</li>
+                                    <li><strong>Paystack Reference:</strong> ${response.reference}</li>
+                                </ul>
+                            `,
                     }),
                 });
             } catch (emailError) { // The semicolon before this line is now gone.
@@ -2907,10 +3047,22 @@
             const email = document.getElementById('payment-email').value || auth.currentUser?.email;
             const plots = parseFloat(document.getElementById('payment-plots').value);
 
-            if (!propertyId) { showPaymentMessage('Please select a property', 'error'); return; }
-            if (!amount || isNaN(amount) || amount < 100) { showPaymentMessage('Amount must be at least ₦100', 'error'); return; } // Adjusted for testing, you can set your minimum
-            if (!email) { showPaymentMessage('Please enter a valid email', 'error'); return; }
-            if (!plots || isNaN(plots) || plots <= 0) { showPaymentMessage('Please enter a valid number of plots', 'error'); return; }
+            if (!propertyId) {
+                showPaymentMessage('Please select a property', 'error');
+                return;
+            }
+            if (!amount || isNaN(amount) || amount < 100) {
+                showPaymentMessage('Amount must be at least ₦100', 'error');
+                return;
+            } // Adjusted for testing, you can set your minimum
+            if (!email) {
+                showPaymentMessage('Please enter a valid email', 'error');
+                return;
+            }
+            if (!plots || isNaN(plots) || plots <= 0) {
+                showPaymentMessage('Please enter a valid number of plots', 'error');
+                return;
+            }
 
             try {
                 const response = await fetch('/.netlify/functions/initialize-payment', {
@@ -2918,7 +3070,10 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ email, amount }),
+                    body: JSON.stringify({
+                        email,
+                        amount
+                    }),
                 });
 
                 if (!response.ok) {
@@ -2926,7 +3081,9 @@
                 }
 
                 const data = await response.json();
-                const { authorization_url } = data.data;
+                const {
+                    authorization_url
+                } = data.data;
 
                 // Redirect to Paystack's payment page
                 window.location.href = authorization_url;
@@ -2941,16 +3098,25 @@
         function proceedToPaymentFromCalculator() {
             const propertySelect = document.getElementById('calculator-property');
             const propertyId = propertySelect.value;
-            if (!propertyId) { showToast('Please select a property first', 'error'); return; }
+            if (!propertyId) {
+                showToast('Please select a property first', 'error');
+                return;
+            }
 
             const pricePerPlot = parseFloat(document.getElementById('price-per-plot').value);
             const numberOfPlots = parseFloat(document.getElementById('number-of-plots').value);
             const totalPrice = pricePerPlot * numberOfPlots;
 
-            if (totalPrice < 100000) { showToast('Minimum amount is ₦100,000', 'error'); return; }
+            if (totalPrice < 100000) {
+                showToast('Minimum amount is ₦100,000', 'error');
+                return;
+            }
 
             getProperty(propertyId).then(property => {
-                if (!property) { showToast('Property not found', 'error'); return; }
+                if (!property) {
+                    showToast('Property not found', 'error');
+                    return;
+                }
                 const handler = PaystackPop.setup({
                     key: paystack.publicKey,
                     email: auth.currentUser?.email || '',
@@ -2981,7 +3147,10 @@
 
             const totalPrice = pricePerPlot * numberOfPlots;
 
-            if (totalPrice < 100000) { showToast('Minimum amount is ₦100,000', 'error'); return; }
+            if (totalPrice < 100000) {
+                showToast('Minimum amount is ₦100,000', 'error');
+                return;
+            }
 
             document.getElementById('calculator-result').classList.remove('hidden');
             document.getElementById('result-text').textContent = `Total Price: ₦${totalPrice.toLocaleString()}`;
@@ -2996,9 +3165,18 @@
             const accountName = document.getElementById('account-name-input').value;
             const accountNumber = document.getElementById('account-number').value;
 
-            if (!investmentId) { showSellMessage('Please select a property to sell', 'error'); return; }
-            if (!sellPrice || isNaN(sellPrice) || sellPrice <= 0) { showSellMessage('Please enter a valid selling price', 'error'); return; }
-            if (!bankName || !accountName || !accountNumber) { showSellMessage('Please provide your bank details', 'error'); return; }
+            if (!investmentId) {
+                showSellMessage('Please select a property to sell', 'error');
+                return;
+            }
+            if (!sellPrice || isNaN(sellPrice) || sellPrice <= 0) {
+                showSellMessage('Please enter a valid selling price', 'error');
+                return;
+            }
+            if (!bankName || !accountName || !accountNumber) {
+                showSellMessage('Please provide your bank details', 'error');
+                return;
+            }
 
             const submitButton = document.getElementById('submit-sale');
             const originalText = submitButton.innerHTML;
@@ -3025,8 +3203,12 @@
                     notification.className = 'fixed bottom-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center';
                     notification.innerHTML = `<i class="fas fa-check-circle mr-2"></i><span>Your property has been listed for sale</span>`;
                     document.body.appendChild(notification);
-                    setTimeout(() => { document.body.removeChild(notification); }, 5000);
-                    if (auth.currentUser) { renderInvestments(auth.currentUser.uid); }
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 5000);
+                    if (auth.currentUser) {
+                        renderInvestments(auth.currentUser.uid);
+                    }
                 }, 2000);
             } catch (error) {
                 showSellMessage('Error listing property: ' + error.message, 'error');
@@ -3053,7 +3235,9 @@
 
             setTimeout(() => {
                 notification.innerHTML = `<i class="fas fa-check-circle mr-2"></i><span>All investments have been updated</span>`;
-                setTimeout(() => { document.body.removeChild(notification); }, 5000);
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 5000);
             }, 3000);
         }
 
@@ -3115,7 +3299,9 @@
                 document.getElementById('property-image').value = '';
                 document.getElementById('property-video-link').value = '';
 
-                setTimeout(() => { app.addPropertyModal.classList.add('hidden'); }, 1500);
+                setTimeout(() => {
+                    app.addPropertyModal.classList.add('hidden');
+                }, 1500);
             } catch (error) {
                 showPropertyMessage('Error adding property: ' + error.message, 'error');
             } finally {
@@ -3187,28 +3373,30 @@
 
         // Search properties
         async function searchProperties() {
-                const query = document.getElementById('search-properties').value.toLowerCase();
-                // Get the selected location from the new dashboard filter
-                const locationFilter = document.getElementById('dashboard-filter-location').value;
-                const allProperties = await getProperties({ status: null }); // Search all statuses in dashboard
+            const query = document.getElementById('search-properties').value.toLowerCase();
+            // Get the selected location from the new dashboard filter
+            const locationFilter = document.getElementById('dashboard-filter-location').value;
+            const allProperties = await getProperties({
+                status: null
+            }); // Search all statuses in dashboard
 
-                const filtered = allProperties.filter(property => {
-                    // Check if the property matches the location filter (or if the filter is "All Locations")
-                    const matchesLocation = !locationFilter || property.location === locationFilter;
+            const filtered = allProperties.filter(property => {
+                // Check if the property matches the location filter (or if the filter is "All Locations")
+                const matchesLocation = !locationFilter || property.location === locationFilter;
 
-                    // Check if the property matches the text search query
-                    const matchesQuery = !query ||
-                        property.title.toLowerCase().includes(query) ||
-                        property.location.toLowerCase().includes(query) ||
-                        property.description.toLowerCase().includes(query);
+                // Check if the property matches the text search query
+                const matchesQuery = !query ||
+                    property.title.toLowerCase().includes(query) ||
+                    property.location.toLowerCase().includes(query) ||
+                    property.description.toLowerCase().includes(query);
 
-                    // The property must match both filters to be included
-                    return matchesLocation && matchesQuery;
-                });
+                // The property must match both filters to be included
+                return matchesLocation && matchesQuery;
+            });
 
-                pagination.currentPage = 1;
-                renderProperties(filtered, true);
-            }
+            pagination.currentPage = 1;
+            renderProperties(filtered, true);
+        }
 
         // Helper function to show toast messages
         function showToast(message, type) {
@@ -3222,7 +3410,9 @@
 
             setTimeout(() => {
                 toast.classList.add('opacity-0', 'transition-opacity', 'duration-300');
-                setTimeout(() => { toast.remove(); }, 300);
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
             }, 5000);
         }
     </script>
@@ -3263,7 +3453,6 @@
                     });
             });
         }
-
     </script>
 
     <div id="chatbot-container" class="fixed bottom-5 right-5 z-50">
@@ -3356,7 +3545,10 @@
 
                 // Add user message to UI and history
                 addMessage('user', userMessage);
-                conversationHistory.push({ role: 'user', content: userMessage });
+                conversationHistory.push({
+                    role: 'user',
+                    content: userMessage
+                });
                 input.value = '';
                 sendButton.disabled = true;
 
@@ -3375,8 +3567,12 @@
                     // Send the entire conversation history to the backend
                     const response = await fetch('/.netlify/functions/deepseek-chat', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ messages: conversationHistory }),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            messages: conversationHistory
+                        }),
                     });
 
                     // Remove typing indicator
@@ -3391,7 +3587,10 @@
 
                     // Add bot response to UI and history
                     addMessage('bot', botResponse);
-                    conversationHistory.push({ role: 'assistant', content: botResponse });
+                    conversationHistory.push({
+                        role: 'assistant',
+                        content: botResponse
+                    });
 
                 } catch (error) {
                     if (messagesContainer.contains(typingIndicator)) {
