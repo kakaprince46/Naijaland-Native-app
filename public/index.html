@@ -413,6 +413,14 @@
                             </button>
                         </div>
 
+                        <section id="admin-review-panel" class="hidden bg-white p-6 rounded-lg shadow-md mb-8">
+                            <h2 class="text-2xl font-bold text-red-800 mb-4">Pending Verifications</h2>
+                            <div id="admin-review-list" class="space-y-4">
+                            </div>
+                        </section>
+                        <div id="admin-controls" class="bg-white p-6 rounded-lg shadow-md mb-6 hidden">
+                        </div>
+
                         <div class="bg-white p-6 rounded-lg shadow-md">
                             <h2 class="text-xl font-bold text-green-800 mb-4">Need Help?</h2>
                             <p class="mb-4">Contact our support team for assistance with your purchase.</p>
@@ -1887,6 +1895,54 @@
             });
         }
 
+        // Add this new function to your JavaScript
+        async function renderAdminReviewPanel() {
+            const reviewPanel = document.getElementById('admin-review-panel');
+            const reviewList = document.getElementById('admin-review-list');
+
+            try {
+                const snapshot = await db.collection('investments')
+                    .where('status', '==', 'pending verification')
+                    .orderBy('createdAt', 'desc')
+                    .get();
+
+                if (snapshot.empty) {
+                    reviewPanel.classList.add('hidden');
+                    return;
+                }
+
+                reviewPanel.classList.remove('hidden');
+                reviewList.innerHTML = ''; // Clear previous items
+
+                for (const doc of snapshot.docs) {
+                    const investment = { id: doc.id, ...doc.data() };
+                    const userDoc = await db.collection('users').doc(investment.userId).get();
+                    const userName = userDoc.exists ? userDoc.data().name : 'Unknown User';
+
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'p-4 border rounded-lg bg-yellow-50';
+                    itemDiv.innerHTML = `
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold">${investment.title}</h3>
+                            <p class="text-sm text-gray-600">User: ${userName} (${userDoc.id})</p>
+                        </div>
+                        <div class="text-sm mb-3">
+                            <p>Plots: <strong>${investment.plots}</strong></p>
+                            <p>Amount Paid: <strong>₦${investment.purchasePrice.toLocaleString()}</strong></p>
+                            <p>Date: <strong>${investment.purchaseDate.toDate().toLocaleDateString()}</strong></p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button class="view-receipt-btn bg-blue-500 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-600" data-investment-id="${investment.id}">View Receipt</button>
+                            <button class="decline-payment-btn bg-red-500 text-white px-3 py-1 rounded-md text-sm hover:bg-red-600" data-investment-id="${investment.id}">Decline</button>
+                        </div>
+                    `;
+                    reviewList.appendChild(itemDiv);
+                }
+            } catch (error) {
+                console.error("Error fetching pending investments:", error);
+                reviewList.innerHTML = '<p class="text-red-500">Could not load pending payments.</p>';
+            }
+        }
         // Show public view
         function showPublicView() {
             app.publicView.classList.remove('hidden');
@@ -1924,6 +1980,11 @@
                 // 2. Then load user's investments
                 await renderInvestments(user.uid);
 
+                if (userDoc.exists && userDoc.data().isAdmin) {
+                    app.adminControls.classList.remove('hidden');
+                    cleanupPendingProperties();
+                    renderAdminReviewPanel(); // <-- ADDED THIS LINE
+                }
                 // 3. Finally load and render properties
                 loadProperties(true);
 
@@ -2166,19 +2227,19 @@
                 if (e.target.classList.contains('view-details') || e.target.closest('.view-details')) {
 
                     /* <-- ADD THIS LINE to start the comment
-                     const user = auth.currentUser;
-                     if (!user) {
-                         showLoginModal();
-                         showAuthMessage("Please log in to view property details and make a secure payment.", "info");
-                     } else {
-                         // Existing functionality for logged-in users
-                         const button = e.target.classList.contains('view-details') ? e.target : e.target.closest('.view-details');
-                         const propertyId = button.dataset.id;
-                         // Implement what should happen when a logged-in user clicks "View Details"
-                         // For example, show a modal with more details.
-                         console.log("Viewing details for property:", propertyId);
-                     }
-                     */ // <-- ADD THIS LINE to end the comment
+                        const user = auth.currentUser;
+                        if (!user) {
+                            showLoginModal();
+                            showAuthMessage("Please log in to view property details and make a secure payment.", "info");
+                        } else {
+                            // Existing functionality for logged-in users
+                            const button = e.target.classList.contains('view-details') ? e.target : e.target.closest('.view-details');
+                            const propertyId = button.dataset.id;
+                            // Implement what should happen when a logged-in user clicks "View Details"
+                            // For example, show a modal with more details.
+                            console.log("Viewing details for property:", propertyId);
+                        }
+                        */ // <-- ADD THIS LINE to end the comment
                 }
 
                 // Pay buttons
@@ -2208,6 +2269,53 @@
                     const button = e.target.classList.contains('view-receipt') ? e.target : e.target.closest('.view-receipt');
                     const investmentId = button.dataset.id;
                     viewReceipt(investmentId);
+                }
+            });
+
+            document.addEventListener('click', async (e) => {
+                // Handle Decline Payment button
+                if (e.target.classList.contains('decline-payment-btn')) {
+                    const investmentId = e.target.dataset.investmentId;
+                    const reason = prompt("Please provide a reason for declining this payment (e.g., 'Incorrect amount', ' blurry receipt'). This will be sent to the user.");
+
+                    if (reason && reason.trim() !== "") {
+                        try {
+                            const user = auth.currentUser;
+                            if (!user) throw new Error("Authentication error.");
+
+                            const idToken = await user.getIdToken(true);
+
+                            showToast('Declining payment...', 'info');
+
+                            const response = await fetch('/.netlify/functions/decline-payment', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${idToken}`
+                                },
+                                body: JSON.stringify({ investmentId, reason })
+                            });
+
+                            if (!response.ok) {
+                                const errorData = await response.json();
+                                throw new Error(errorData.message || "Failed to decline payment.");
+                            }
+
+                            showToast('Payment declined successfully!', 'success');
+                            renderAdminReviewPanel(); // Refresh the panel
+                            loadProperties(true); // Refresh properties in the dashboard
+
+                        } catch (error) {
+                            console.error('Decline Error:', error);
+                            showToast(error.message, 'error');
+                        }
+                    }
+                }
+
+                // Handle View Receipt button in admin panel
+                if (e.target.classList.contains('view-receipt-btn')) {
+                    const investmentId = e.target.dataset.investmentId;
+                    viewReceipt(investmentId); // Re-use your existing viewReceipt function
                 }
             });
         }
@@ -2618,64 +2726,64 @@
 
                 if (receipt.fileType.includes('image')) {
                     modal.innerHTML = `
-                                        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl auth-form">
-                                            <div class="p-6">
-                                                <div class="flex justify-between items-center mb-4">
-                                                    <h2 class="text-2xl font-bold text-green-800">Payment Receipt</h2>
-                                                    <button class="close-receipt-view text-gray-500 hover:text-gray-700">
-                                                        <i class="fas fa-times"></i>
-                                                    </button>
-                                                </div>
-                                               
-                                                <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    <div>
-                                                        <p class="text-sm text-gray-500">Amount Paid</p>
-                                                        <p class="font-medium">₦${receipt.amount.toLocaleString()}</p>
+                                            <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl auth-form">
+                                                <div class="p-6">
+                                                    <div class="flex justify-between items-center mb-4">
+                                                        <h2 class="text-2xl font-bold text-green-800">Payment Receipt</h2>
+                                                        <button class="close-receipt-view text-gray-500 hover:text-gray-700">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
                                                     </div>
-                                                    <div>
-                                                        <p class="text-sm text-gray-500">Payment Date</p>
-                                                        <p class="font-medium">${paymentDate}</p>
+                                                    
+                                                    <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                        <div>
+                                                            <p class="text-sm text-gray-500">Amount Paid</p>
+                                                            <p class="font-medium">₦${receipt.amount.toLocaleString()}</p>
+                                                        </div>
+                                                        <div>
+                                                            <p class="text-sm text-gray-500">Payment Date</p>
+                                                            <p class="font-medium">${paymentDate}</p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                               
-                                                <div class="border rounded-lg p-2">
-                                                    <img src="data:${receipt.fileType};base64,${receipt.base64Data}" alt="Payment Receipt" class="max-h-[70vh] mx-auto">
+                                                    
+                                                    <div class="border rounded-lg p-2">
+                                                        <img src="data:${receipt.fileType};base64,${receipt.base64Data}" alt="Payment Receipt" class="max-h-[70vh] mx-auto">
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    `;
+                                        `;
                 } else {
                     modal.innerHTML = `
-                                        <div class="bg-white rounded-lg shadow-xl w-full max-w-md auth-form">
-                                            <div class="p-6">
-                                                <div class="flex justify-between items-center mb-4">
-                                                    <h2 class="text-2xl font-bold text-green-800">Payment Receipt</h2>
-                                                    <button class="close-receipt-view text-gray-500 hover:text-gray-700">
-                                                        <i class="fas fa-times"></i>
-                                                    </button>
-                                                </div>
-                                               
-                                                <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    <div>
-                                                        <p class="text-sm text-gray-500">Amount Paid</p>
-                                                        <p class="font-medium">₦${receipt.amount.toLocaleString()}</p>
+                                            <div class="bg-white rounded-lg shadow-xl w-full max-w-md auth-form">
+                                                <div class="p-6">
+                                                    <div class="flex justify-between items-center mb-4">
+                                                        <h2 class="text-2xl font-bold text-green-800">Payment Receipt</h2>
+                                                        <button class="close-receipt-view text-gray-500 hover:text-gray-700">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
                                                     </div>
-                                                    <div>
-                                                        <p class="text-sm text-gray-500">Payment Date</p>
-                                                        <p class="font-medium">${paymentDate}</p>
+                                                    
+                                                    <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                        <div>
+                                                            <p class="text-sm text-gray-500">Amount Paid</p>
+                                                            <p class="font-medium">₦${receipt.amount.toLocaleString()}</p>
+                                                        </div>
+                                                        <div>
+                                                            <p class="text-sm text-gray-500">Payment Date</p>
+                                                            <p class="font-medium">${paymentDate}</p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                               
-                                                <div class="text-center py-8">
-                                                    <i class="fas fa-file-pdf text-5xl text-red-500 mb-4"></i>
-                                                    <p class="mb-4">PDF receipt uploaded</p>
-                                                    <button class="download-receipt bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition" data-id="${investmentId}">
-                                                        <i class="fas fa-download mr-2"></i> Download Receipt
-                                                    </button>
+                                                    
+                                                    <div class="text-center py-8">
+                                                        <i class="fas fa-file-pdf text-5xl text-red-500 mb-4"></i>
+                                                        <p class="mb-4">PDF receipt uploaded</p>
+                                                        <button class="download-receipt bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition" data-id="${investmentId}">
+                                                            <i class="fas fa-download mr-2"></i> Download Receipt
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    `;
+                                        `;
                 }
 
                 document.body.appendChild(modal);
@@ -2786,7 +2894,7 @@
                     throw new Error(errorData.message || 'Failed to send code.');
                 }
 
-               // On success, update the UI to show the next step
+                // On success, update the UI to show the next step
                 hideAuthLoading();
                 document.getElementById('email-verification-step').classList.add('hidden');
                 document.getElementById('registration-details').classList.remove('hidden');
@@ -2804,72 +2912,72 @@
 
         // MODIFIED: The registerUser function now handles the final verification and registration
         async function registerUser() {
-                const name = document.getElementById('register-name').value;
-                const email = document.getElementById('register-email').value;
-                const phone = document.getElementById('register-phone').value;
-                const location = document.getElementById('register-location').value;
-                const password = document.getElementById('register-password').value;
-                const confirmPassword = document.getElementById('register-confirm-password').value;
-                const code = document.getElementById('verification-code').value;
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const phone = document.getElementById('register-phone').value;
+            const location = document.getElementById('register-location').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            const code = document.getElementById('verification-code').value;
 
-                // --- Add validation checks here for a better user experience ---
-                if (!name || !email || !phone || !location || !password || !confirmPassword || !code) {
-                    showAuthMessage('All fields are required.', 'error');
-                    return;
-                }
-                if (password !== confirmPassword) {
-                    showAuthMessage('Passwords do not match.', 'error');
-                    return;
-                }
-                if (password.length < 6) {
-                    showAuthMessage('Password must be at least 6 characters.', 'error');
-                    return;
-                }
-
-                showAuthLoading('Completing registration...');
-
-                try {
-                    const response = await fetch('/.netlify/functions/verify-and-register', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            name,
-                            email,
-                            phone,
-                            location,
-                            password,
-                            code
-                        })
-                    });
-
-                    if (response.ok) {
-                        const data = await response.json();
-                        showAuthMessage(data.message + " You can now log in.", 'success');
-                        // Wait a moment, then show the login form
-                        setTimeout(() => {
-                            showLoginModal();
-                        }, 3000);
-                    } else {
-                        const contentType = response.headers.get("content-type");
-                        if (contentType && contentType.indexOf("application/json") !== -1) {
-                            const errorData = await response.json();
-                            throw new Error(errorData.message || 'Registration failed.');
-                        } else {
-                            const errorText = await response.text();
-                            console.error("Non-JSON error response from server:", errorText);
-                            throw new Error('An unexpected server error occurred. Please try again.');
-                        }
-                    }
-                } catch (error) {
-                    hideAuthLoading();
-                    // Restore the form state and show the error message
-                    document.getElementById('email-verification-step').classList.add('hidden');
-                    document.getElementById('registration-details').classList.remove('hidden');
-                    showAuthMessage(error.message, 'error');
-                }
+            // --- Add validation checks here for a better user experience ---
+            if (!name || !email || !phone || !location || !password || !confirmPassword || !code) {
+                showAuthMessage('All fields are required.', 'error');
+                return;
             }
+            if (password !== confirmPassword) {
+                showAuthMessage('Passwords do not match.', 'error');
+                return;
+            }
+            if (password.length < 6) {
+                showAuthMessage('Password must be at least 6 characters.', 'error');
+                return;
+            }
+
+            showAuthLoading('Completing registration...');
+
+            try {
+                const response = await fetch('/.netlify/functions/verify-and-register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        phone,
+                        location,
+                        password,
+                        code
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    showAuthMessage(data.message + " You can now log in.", 'success');
+                    // Wait a moment, then show the login form
+                    setTimeout(() => {
+                        showLoginModal();
+                    }, 3000);
+                } else {
+                    const contentType = response.headers.get("content-type");
+                    if (contentType && contentType.indexOf("application/json") !== -1) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'Registration failed.');
+                    } else {
+                        const errorText = await response.text();
+                        console.error("Non-JSON error response from server:", errorText);
+                        throw new Error('An unexpected server error occurred. Please try again.');
+                    }
+                }
+            } catch (error) {
+                hideAuthLoading();
+                // Restore the form state and show the error message
+                document.getElementById('email-verification-step').classList.add('hidden');
+                document.getElementById('registration-details').classList.remove('hidden');
+                showAuthMessage(error.message, 'error');
+            }
+        }
 
         // NEW HELPER FUNCTIONS: To manage the auth loading state
         function showAuthLoading(message) {
@@ -2920,10 +3028,10 @@
 
         // Show auth message
         function showAuthMessage(message, type) {
-                app.authMessage.textContent = message;
-                app.authMessage.className = `mt-4 p-3 rounded-lg text-center ${type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`;
-                app.authMessage.classList.remove('hidden'); // FIX: Changed 'element' to 'app.authMessage'
-            }
+            app.authMessage.textContent = message;
+            app.authMessage.className = `mt-4 p-3 rounded-lg text-center ${type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`;
+            app.authMessage.classList.remove('hidden'); // FIX: Changed 'element' to 'app.authMessage'
+        }
 
         // Show edit profile modal
         function showEditProfileModal() {
